@@ -30,7 +30,7 @@ export default function MenuCogs() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-semibold text-foreground">{item.name}</p>
-                <p className="text-xs text-muted-foreground">{item.nameKh}</p>
+                <p className="text-xs text-muted-foreground">{item.name_kh}</p>
               </div>
               <Badge variant="outline" className={cn("text-[10px] shrink-0", tagStyles[item.tag])}>
                 {item.tag}
@@ -55,7 +55,7 @@ export default function MenuCogs() {
               </div>
               <div className="text-center">
                 <p className="text-[10px] text-muted-foreground">Sold</p>
-                <p className="text-xs font-semibold text-foreground">{item.unitsSold}</p>
+                <p className="text-xs font-semibold text-foreground">{item.units_sold}</p>
               </div>
             </div>
 

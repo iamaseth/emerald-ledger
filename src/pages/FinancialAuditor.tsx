@@ -33,12 +33,12 @@ export default function FinancialAuditor() {
               </TableHeader>
               <TableBody>
                 {mockBills.map((b) => (
-                  <TableRow key={b.id} className="border-border hover:bg-secondary/40">
-                    <TableCell className="font-mono text-xs text-foreground">{b.id}</TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{b.time}</TableCell>
+                  <TableRow key={b.bill_id} className="border-border hover:bg-secondary/40">
+                    <TableCell className="font-mono text-xs text-foreground">{b.bill_id}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{b.timestamp}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{b.table}</TableCell>
-                    <TableCell className="text-xs text-right font-medium text-foreground">${b.total.toFixed(2)}</TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{b.staff}</TableCell>
+                    <TableCell className="text-xs text-right font-medium text-foreground">${b.grand_total.toFixed(2)}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{b.staff_name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -54,8 +54,8 @@ export default function FinancialAuditor() {
           <div className="overflow-auto max-h-[520px]">
             <div className="flex flex-col">
               {mockBills.map((b) => (
-                <div key={b.id} className="flex items-center justify-center border-b border-border px-2 py-[13px]">
-                  <StatusBadge status={b.status} />
+                <div key={b.bill_id} className="flex items-center justify-center border-b border-border px-2 py-[13px]">
+                  <StatusBadge status={b.aba_status} />
                 </div>
               ))}
             </div>
@@ -81,7 +81,7 @@ export default function FinancialAuditor() {
                 {mockBankTransactions.map((t) => (
                   <TableRow key={t.id} className="border-border hover:bg-secondary/40">
                     <TableCell className="font-mono text-xs text-foreground">{t.ref}</TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{t.time}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{t.timestamp}</TableCell>
                     <TableCell className="text-xs text-right font-medium text-foreground">${t.amount.toFixed(2)}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">{t.sender}</TableCell>
                   </TableRow>

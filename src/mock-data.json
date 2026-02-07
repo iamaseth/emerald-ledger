@@ -1,0 +1,84 @@
+{
+  "daily_sales": [
+    { "date": "Jan 27", "sales": 4250, "deposits": 3980 },
+    { "date": "Jan 28", "sales": 5120, "deposits": 5120 },
+    { "date": "Jan 29", "sales": 3890, "deposits": 3650 },
+    { "date": "Jan 30", "sales": 6340, "deposits": 6340 },
+    { "date": "Jan 31", "sales": 7210, "deposits": 6900 },
+    { "date": "Feb 01", "sales": 8450, "deposits": 8200 },
+    { "date": "Feb 02", "sales": 9120, "deposits": 9120 },
+    { "date": "Feb 03", "sales": 5670, "deposits": 5400 },
+    { "date": "Feb 04", "sales": 6890, "deposits": 6890 },
+    { "date": "Feb 05", "sales": 7340, "deposits": 7100 },
+    { "date": "Feb 06", "sales": 8120, "deposits": 7850 },
+    { "date": "Feb 07", "sales": 4560, "deposits": 4560 },
+    { "date": "Feb 08", "sales": 9870, "deposits": 9500 },
+    { "date": "Feb 09", "sales": 6780, "deposits": 6780 }
+  ],
+  "bills": [
+    { "bill_id": "POS-20250206-001", "date": "2025-02-06", "timestamp": "11:23", "table": "T-04", "items": 6, "grand_total": 48.50, "payment_mode": "ABA QR", "staff_name": "Sokha", "aba_status": "Matched", "aba_ref": "ABA-QR-88401" },
+    { "bill_id": "POS-20250206-002", "date": "2025-02-06", "timestamp": "11:45", "table": "T-07", "items": 3, "grand_total": 27.00, "payment_mode": "Cash", "staff_name": "Dara", "aba_status": "Unpaid" },
+    { "bill_id": "POS-20250206-003", "date": "2025-02-06", "timestamp": "12:10", "table": "T-01", "items": 8, "grand_total": 92.00, "payment_mode": "ABA QR", "staff_name": "Chanthol", "aba_status": "Matched", "aba_ref": "ABA-QR-88403" },
+    { "bill_id": "POS-20250206-004", "date": "2025-02-06", "timestamp": "12:34", "table": "T-12", "items": 4, "grand_total": 35.50, "payment_mode": "ABA QR", "staff_name": "Reaksmey", "aba_status": "Mismatch", "aba_ref": "ABA-QR-88404" },
+    { "bill_id": "POS-20250206-005", "date": "2025-02-06", "timestamp": "13:02", "table": "T-09", "items": 5, "grand_total": 63.00, "payment_mode": "ABA QR", "staff_name": "Sokha", "aba_status": "Matched", "aba_ref": "ABA-QR-88405" },
+    { "bill_id": "POS-20250206-006", "date": "2025-02-06", "timestamp": "13:18", "table": "T-02", "items": 2, "grand_total": 18.00, "payment_mode": "Cash", "staff_name": "Bopha", "aba_status": "Matched" },
+    { "bill_id": "POS-20250206-007", "date": "2025-02-06", "timestamp": "13:45", "table": "T-06", "items": 7, "grand_total": 84.00, "payment_mode": "ABA QR", "staff_name": "Virak", "aba_status": "Matched", "aba_ref": "ABA-QR-88407" },
+    { "bill_id": "POS-20250206-008", "date": "2025-02-06", "timestamp": "14:12", "table": "T-03", "items": 3, "grand_total": 22.50, "payment_mode": "ABA QR", "staff_name": "Srey Neth", "aba_status": "Ghost Payment", "aba_ref": "ABA-QR-88408" },
+    { "bill_id": "POS-20250206-009", "date": "2025-02-06", "timestamp": "14:30", "table": "T-10", "items": 9, "grand_total": 128.00, "payment_mode": "ABA QR", "staff_name": "Dara", "aba_status": "Matched", "aba_ref": "ABA-QR-88409" },
+    { "bill_id": "POS-20250206-010", "date": "2025-02-06", "timestamp": "15:05", "table": "T-05", "items": 4, "grand_total": 42.00, "payment_mode": "Cash", "staff_name": "Chanthol", "aba_status": "Matched" }
+  ],
+  "bank_transactions": [
+    { "id": "TXN-001", "ref": "ABA-QR-88401", "date": "2025-02-06", "timestamp": "11:24", "amount": 48.50, "sender": "Chan Sovann", "matched_bill_id": "POS-20250206-001" },
+    { "id": "TXN-002", "ref": "ABA-QR-88403", "date": "2025-02-06", "timestamp": "12:11", "amount": 92.00, "sender": "Ly Sopheak", "matched_bill_id": "POS-20250206-003" },
+    { "id": "TXN-003", "ref": "ABA-QR-88404", "date": "2025-02-06", "timestamp": "12:35", "amount": 33.00, "sender": "Kim Hora", "matched_bill_id": "POS-20250206-004" },
+    { "id": "TXN-004", "ref": "ABA-QR-88405", "date": "2025-02-06", "timestamp": "13:03", "amount": 63.00, "sender": "Phan Rith", "matched_bill_id": "POS-20250206-005" },
+    { "id": "TXN-005", "ref": "ABA-QR-88407", "date": "2025-02-06", "timestamp": "13:46", "amount": 84.00, "sender": "Oun Maly", "matched_bill_id": "POS-20250206-007" },
+    { "id": "TXN-006", "ref": "ABA-QR-88408", "date": "2025-02-06", "timestamp": "14:12", "amount": 22.50, "sender": "Unknown", "matched_bill_id": "POS-20250206-008" },
+    { "id": "TXN-007", "ref": "ABA-QR-88409", "date": "2025-02-06", "timestamp": "14:31", "amount": 128.00, "sender": "Touch Leang", "matched_bill_id": "POS-20250206-009" },
+    { "id": "TXN-008", "ref": "ABA-QR-88412", "date": "2025-02-06", "timestamp": "16:00", "amount": 55.00, "sender": "Nhem Piseth" }
+  ],
+  "audit_actions": [
+    { "id": "AUD-001", "type": "Void", "staff_name": "Sokha", "date": "2025-02-06", "timestamp": "12:45", "amount": 12.00, "reason": "Customer complaint — wrong order", "bill_id": "POS-20250206-002" },
+    { "id": "AUD-002", "type": "Manual Discount", "staff_name": "Dara", "date": "2025-02-06", "timestamp": "13:10", "amount": 8.50, "reason": "VIP guest — manager approved", "bill_id": "POS-20250206-005" },
+    { "id": "AUD-003", "type": "Bill Deletion", "staff_name": "Virak", "date": "2025-02-06", "timestamp": "14:22", "amount": 35.00, "reason": "Duplicate bill entry", "bill_id": "POS-20250206-007" },
+    { "id": "AUD-004", "type": "Void", "staff_name": "Chanthol", "date": "2025-02-06", "timestamp": "15:30", "amount": 6.00, "reason": "Item unavailable", "bill_id": "POS-20250206-009" },
+    { "id": "AUD-005", "type": "Manual Discount", "staff_name": "Reaksmey", "date": "2025-02-06", "timestamp": "16:15", "amount": 15.00, "reason": "Birthday promotion — 20% off", "bill_id": "POS-20250206-010" },
+    { "id": "AUD-006", "type": "Bill Deletion", "staff_name": "Sokha", "date": "2025-02-05", "timestamp": "19:40", "amount": 22.00, "reason": "Test order — training", "bill_id": "POS-20250205-018" },
+    { "id": "AUD-007", "type": "Void", "staff_name": "Bopha", "date": "2025-02-05", "timestamp": "20:10", "amount": 9.50, "reason": "Spilled drink — remade", "bill_id": "POS-20250205-021" }
+  ],
+  "menu_items": [
+    { "id": "M-001", "name": "Lok Lak", "name_kh": "ឡុកឡាក់", "category": "Main Course", "price": 8.50, "cost": 3.20, "margin": 62, "units_sold": 145, "revenue": 1232.50, "tag": "Best Seller" },
+    { "id": "M-002", "name": "Fish Amok", "name_kh": "អាម៉ុក", "category": "Main Course", "price": 9.00, "cost": 3.80, "margin": 58, "units_sold": 112, "revenue": 1008.00, "tag": "Best Seller" },
+    { "id": "M-003", "name": "Beef Stir-Fry", "name_kh": "ឆាសាច់គោ", "category": "Main Course", "price": 7.50, "cost": 4.10, "margin": 45, "units_sold": 89, "revenue": 667.50, "tag": "Standard" },
+    { "id": "M-004", "name": "Spring Rolls", "name_kh": "ន៎ំចៀន", "category": "Appetizer", "price": 4.00, "cost": 1.20, "margin": 70, "units_sold": 198, "revenue": 792.00, "tag": "Best Seller" },
+    { "id": "M-005", "name": "Wagyu Steak", "name_kh": "សាច់គោវ៉ាហ្គូ", "category": "Premium", "price": 28.00, "cost": 22.00, "margin": 21, "units_sold": 12, "revenue": 336.00, "tag": "Low Margin" },
+    { "id": "M-006", "name": "Imported Wine Glass", "name_kh": "ស្រាបារាំង", "category": "Beverage", "price": 12.00, "cost": 8.50, "margin": 29, "units_sold": 34, "revenue": 408.00, "tag": "Low Margin" },
+    { "id": "M-007", "name": "Iced Coffee", "name_kh": "កាហ្វេទឹកកក", "category": "Beverage", "price": 3.00, "cost": 0.60, "margin": 80, "units_sold": 320, "revenue": 960.00, "tag": "Best Seller" },
+    { "id": "M-008", "name": "Green Mango Salad", "name_kh": "ញាំស្វាយ", "category": "Appetizer", "price": 5.00, "cost": 1.80, "margin": 64, "units_sold": 76, "revenue": 380.00, "tag": "Standard" },
+    { "id": "M-009", "name": "Prahok Ktis", "name_kh": "ប្រហុកខ្ទិះ", "category": "Main Course", "price": 6.50, "cost": 2.40, "margin": 63, "units_sold": 95, "revenue": 617.50, "tag": "Standard" },
+    { "id": "M-010", "name": "Lobster Tail", "name_kh": "បង្គាធំ", "category": "Premium", "price": 35.00, "cost": 28.00, "margin": 20, "units_sold": 8, "revenue": 280.00, "tag": "Low Margin" }
+  ],
+  "inventory_items": [
+    { "id": "INV-001", "name": "Hennessy VS", "category": "Liquor", "unit": "Bottle", "current_stock": 8, "min_stock": 5, "unit_cost": 45.00, "total_value": 360.00, "last_restocked": "2025-02-01" },
+    { "id": "INV-002", "name": "Johnnie Walker Black", "category": "Liquor", "unit": "Bottle", "current_stock": 3, "min_stock": 5, "unit_cost": 38.00, "total_value": 114.00, "last_restocked": "2025-01-28" },
+    { "id": "INV-003", "name": "Australian Wagyu Striploin", "category": "Premium Meat", "unit": "kg", "current_stock": 4.5, "min_stock": 3, "unit_cost": 65.00, "total_value": 292.50, "last_restocked": "2025-02-04" },
+    { "id": "INV-004", "name": "Tiger Prawns", "category": "Seafood", "unit": "kg", "current_stock": 2.0, "min_stock": 5, "unit_cost": 22.00, "total_value": 44.00, "last_restocked": "2025-02-05" },
+    { "id": "INV-005", "name": "Siem Reap Craft Beer", "category": "Beverage", "unit": "Case", "current_stock": 12, "min_stock": 8, "unit_cost": 18.00, "total_value": 216.00, "last_restocked": "2025-02-03" },
+    { "id": "INV-006", "name": "Imported Olive Oil", "category": "Pantry", "unit": "Bottle", "current_stock": 6, "min_stock": 4, "unit_cost": 12.00, "total_value": 72.00, "last_restocked": "2025-02-02" },
+    { "id": "INV-007", "name": "Fresh Lobster", "category": "Seafood", "unit": "kg", "current_stock": 1.5, "min_stock": 3, "unit_cost": 55.00, "total_value": 82.50, "last_restocked": "2025-02-05" }
+  ],
+  "waste_logs": [
+    { "id": "W-001", "item_name": "Tiger Prawns", "quantity": 0.5, "unit": "kg", "reason": "Expired — exceeded shelf life", "staff_name": "Chanthol", "date": "2025-02-06", "cost": 11.00 },
+    { "id": "W-002", "item_name": "Siem Reap Craft Beer", "quantity": 2, "unit": "Bottle", "reason": "Dropped during service", "staff_name": "Bopha", "date": "2025-02-05", "cost": 6.00 },
+    { "id": "W-003", "item_name": "Australian Wagyu Striploin", "quantity": 0.3, "unit": "kg", "reason": "Over-trimmed", "staff_name": "Sokha", "date": "2025-02-06", "cost": 19.50 }
+  ],
+  "staff_members": [
+    { "id": "S-001", "staff_name": "Sokha", "role": "Senior Server", "sales_total": 1840, "hours_worked": 42, "sales_per_hour": 43.81, "hourly_cost": 4.50, "attendance": 98, "rating": 4.8 },
+    { "id": "S-002", "staff_name": "Dara", "role": "Server", "sales_total": 1520, "hours_worked": 40, "sales_per_hour": 38.00, "hourly_cost": 3.50, "attendance": 95, "rating": 4.5 },
+    { "id": "S-003", "staff_name": "Chanthol", "role": "Head Chef", "sales_total": 0, "hours_worked": 48, "sales_per_hour": 0, "hourly_cost": 6.00, "attendance": 100, "rating": 4.9 },
+    { "id": "S-004", "staff_name": "Reaksmey", "role": "Server", "sales_total": 1380, "hours_worked": 38, "sales_per_hour": 36.32, "hourly_cost": 3.50, "attendance": 92, "rating": 4.3 },
+    { "id": "S-005", "staff_name": "Bopha", "role": "Bartender", "sales_total": 960, "hours_worked": 36, "sales_per_hour": 26.67, "hourly_cost": 4.00, "attendance": 88, "rating": 4.1 },
+    { "id": "S-006", "staff_name": "Virak", "role": "Server", "sales_total": 1650, "hours_worked": 44, "sales_per_hour": 37.50, "hourly_cost": 3.50, "attendance": 96, "rating": 4.6 },
+    { "id": "S-007", "staff_name": "Srey Neth", "role": "Hostess", "sales_total": 420, "hours_worked": 35, "sales_per_hour": 12.00, "hourly_cost": 3.00, "attendance": 100, "rating": 4.7 }
+  ]
+}
