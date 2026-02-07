@@ -99,4 +99,12 @@
   .text-gradient-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-[hsl(152,60%,48%)] to-[hsl(152,80%,65%)];
   }
+  .animate-slide-in-left {
+    animation: slideInLeft 0.2s ease-out;
+  }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
 }
