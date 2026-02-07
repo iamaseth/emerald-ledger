@@ -1,19 +1,13 @@
-import { useState } from "react";
-import { format } from "date-fns";
+import { usePeriod } from "@/contexts/PeriodContext";
+import { PeriodToolbar } from "@/components/shared/PeriodToolbar";
 import { KPICard } from "@/components/shared/KPICard";
 import { ExportButton } from "@/components/shared/ExportButton";
-import { usePeriodData, type PeriodMode } from "@/hooks/usePeriodData";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   DollarSign,
-  TrendingUp,
   Landmark,
   ShieldCheck,
   AlertTriangle,
-  CalendarIcon,
 } from "lucide-react";
 import {
   LineChart,
@@ -25,18 +19,9 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { cn } from "@/lib/utils";
-import type { DateRange } from "react-day-picker";
 
 const fmt = (n: number) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
-
-const MODES: { value: PeriodMode; label: string }[] = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "custom", label: "Custom" },
-];
 
 function KPISkeleton() {
   return (
@@ -58,28 +43,7 @@ function ChartSkeleton() {
 }
 
 export default function ExecutivePulse() {
-  const { mode, changeMode, stats, isPending, changeCustomRange } = usePeriodData();
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [calendarOpen, setCalendarOpen] = useState(false);
-
-  const handleDateSelect = (range: DateRange | undefined) => {
-    setDateRange(range);
-    if (range?.from && range?.to) {
-      changeCustomRange(range.from, range.to);
-      setCalendarOpen(false);
-    }
-  };
-
-  const periodLabel =
-    mode === "daily"
-      ? "Today"
-      : mode === "weekly"
-        ? "Last 7 days"
-        : mode === "monthly"
-          ? "Last 30 days"
-          : dateRange?.from && dateRange?.to
-            ? `${format(dateRange.from, "MMM d")} – ${format(dateRange.to, "MMM d")}`
-            : "Select range";
+  const { stats, isPending, periodLabel } = usePeriod();
 
   return (
     <div className="space-y-6">
@@ -92,54 +56,8 @@ export default function ExecutivePulse() {
         <ExportButton label="Export PDF" />
       </div>
 
-      {/* Period Toggle + Date Picker */}
-      <div className="flex flex-wrap items-center gap-2">
-        {MODES.map((m) => (
-          <Button
-            key={m.value}
-            size="sm"
-            variant={mode === m.value ? "default" : "outline"}
-            onClick={() => {
-              if (m.value === "custom") {
-                setCalendarOpen(true);
-              } else {
-                changeMode(m.value);
-              }
-            }}
-            className="text-xs"
-          >
-            {m.label}
-          </Button>
-        ))}
-
-        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "text-xs gap-1.5",
-                mode === "custom" && "border-primary text-primary"
-              )}
-              onClick={() => setCalendarOpen(true)}
-            >
-              <CalendarIcon className="h-3.5 w-3.5" />
-              {dateRange?.from && dateRange?.to
-                ? `${format(dateRange.from, "MMM d")} – ${format(dateRange.to, "MMM d")}`
-                : "Pick dates"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="range"
-              selected={dateRange}
-              onSelect={handleDateSelect}
-              numberOfMonths={1}
-              className="p-3 pointer-events-auto"
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
+      {/* Global Period Toggle */}
+      <PeriodToolbar />
 
       {/* KPI Cards */}
       {isPending ? (
@@ -259,7 +177,7 @@ export default function ExecutivePulse() {
               </h3>
               <p className="text-sm text-muted-foreground">
                 <span className="font-bold text-warning">{fmt(stats.discrepancy)}</span>{" "}
-                in sales were not matched by bank deposits during this {mode === "daily" ? "day" : mode === "custom" ? "period" : mode === "weekly" ? "week" : "month"}.
+                in sales were not matched by bank deposits during this period.
                 This may include pending cash deposits or unreconciled QR payments.
               </p>
             </div>

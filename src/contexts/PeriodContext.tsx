@@ -1,10 +1,9 @@
-import { useState, useMemo, useCallback, useTransition } from "react";
+import { createContext, useContext, useState, useMemo, useCallback, useTransition, type ReactNode } from "react";
 import { mockDailySales, mockBills, mockBankTransactions } from "@/lib/mock-data";
-import type { DailySales } from "@/lib/mock-data";
+import type { DailySales, Bill } from "@/lib/mock-data";
 
 export type PeriodMode = "daily" | "weekly" | "monthly" | "custom";
 
-// Map mock short dates to real Date objects (using 2025 as mock year)
 const MONTH_MAP: Record<string, number> = {
   Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
   Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
@@ -17,6 +16,7 @@ function parseShortDate(d: string): Date {
 
 export interface PeriodStats {
   filteredSales: DailySales[];
+  filteredBills: Bill[];
   totalSales: number;
   totalDeposits: number;
   matchedCount: number;
@@ -25,7 +25,25 @@ export interface PeriodStats {
   reconciliationPct: number;
 }
 
-export function usePeriodData() {
+interface PeriodContextValue {
+  mode: PeriodMode;
+  changeMode: (m: PeriodMode) => void;
+  customRange: { from: Date; to: Date } | null;
+  changeCustomRange: (from: Date, to: Date) => void;
+  stats: PeriodStats;
+  isPending: boolean;
+  periodLabel: string;
+}
+
+const PeriodContext = createContext<PeriodContextValue | null>(null);
+
+export function usePeriod() {
+  const ctx = useContext(PeriodContext);
+  if (!ctx) throw new Error("usePeriod must be used within PeriodProvider");
+  return ctx;
+}
+
+export function PeriodProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<PeriodMode>("weekly");
   const [customRange, setCustomRange] = useState<{ from: Date; to: Date } | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -75,17 +93,22 @@ export function usePeriodData() {
       return d >= from && d <= to;
     });
 
+    const filteredBills = mockBills.filter((b) => {
+      const d = parseShortDate(b.date);
+      return d >= from && d <= to;
+    });
+
     const totalSales = filtered.reduce((s, r) => s + r.sales, 0);
     const totalDeposits = filtered.reduce((s, r) => s + r.deposits, 0);
     const discrepancy = totalSales - totalDeposits;
 
-    // Reconciliation from bills data
-    const matchedCount = mockBills.filter((b) => b.aba_status === "Matched").length;
-    const totalBills = mockBills.length;
+    const matchedCount = filteredBills.filter((b) => b.aba_status === "Matched").length;
+    const totalBills = filteredBills.length;
     const reconciliationPct = totalBills > 0 ? (matchedCount / totalBills) * 100 : 0;
 
     return {
       filteredSales: filtered,
+      filteredBills,
       totalSales,
       totalDeposits,
       matchedCount,
@@ -95,5 +118,20 @@ export function usePeriodData() {
     };
   }, [mode, customRange]);
 
-  return { mode, changeMode, customRange, changeCustomRange, stats, isPending };
+  const periodLabel =
+    mode === "daily"
+      ? "Today"
+      : mode === "weekly"
+        ? "Last 7 days"
+        : mode === "monthly"
+          ? "Last 30 days"
+          : customRange
+            ? `${customRange.from.toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${customRange.to.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+            : "Select range";
+
+  return (
+    <PeriodContext.Provider value={{ mode, changeMode, customRange, changeCustomRange, stats, isPending, periodLabel }}>
+      {children}
+    </PeriodContext.Provider>
+  );
 }
