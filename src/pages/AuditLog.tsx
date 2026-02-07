@@ -42,10 +42,10 @@ export default function AuditLog() {
                     {a.type}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm text-foreground font-medium">{a.staff}</TableCell>
+                <TableCell className="text-sm text-foreground font-medium">{a.staff_name}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{a.date}</TableCell>
-                <TableCell className="text-xs text-muted-foreground">{a.time}</TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground">{a.billId}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">{a.timestamp}</TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">{a.bill_id}</TableCell>
                 <TableCell className="text-sm text-right font-medium text-destructive">${a.amount.toFixed(2)}</TableCell>
                 <TableCell className="text-xs text-muted-foreground max-w-[250px] truncate">{a.reason}</TableCell>
               </TableRow>

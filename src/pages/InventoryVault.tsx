@@ -21,7 +21,6 @@ export default function InventoryVault() {
         <ExportButton label="Export Excel" />
       </div>
 
-      {/* Inventory Table */}
       <div className="glass-card overflow-hidden">
         <Table>
           <TableHeader>
@@ -37,17 +36,17 @@ export default function InventoryVault() {
           </TableHeader>
           <TableBody>
             {mockInventoryItems.map((item) => {
-              const low = item.currentStock < item.minStock;
+              const low = item.current_stock < item.min_stock;
               return (
                 <TableRow key={item.id} className="border-border hover:bg-secondary/40">
                   <TableCell className="text-sm font-medium text-foreground">{item.name}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{item.category}</TableCell>
                   <TableCell className={cn("text-sm text-center font-semibold", low ? "text-destructive" : "text-foreground")}>
-                    {item.currentStock} {item.unit}
+                    {item.current_stock} {item.unit}
                   </TableCell>
-                  <TableCell className="text-xs text-center text-muted-foreground">{item.minStock}</TableCell>
-                  <TableCell className="text-xs text-right text-foreground">${item.unitCost.toFixed(2)}</TableCell>
-                  <TableCell className="text-sm text-right font-medium text-foreground">${item.totalValue.toFixed(2)}</TableCell>
+                  <TableCell className="text-xs text-center text-muted-foreground">{item.min_stock}</TableCell>
+                  <TableCell className="text-xs text-right text-foreground">${item.unit_cost.toFixed(2)}</TableCell>
+                  <TableCell className="text-sm text-right font-medium text-foreground">${item.total_value.toFixed(2)}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={cn("text-[10px]",
                       low ? "bg-destructive/15 text-destructive border-destructive/30" : "bg-success/15 text-success border-success/30"
@@ -62,7 +61,6 @@ export default function InventoryVault() {
         </Table>
       </div>
 
-      {/* Waste Log */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">Waste Log</h2>
@@ -96,10 +94,10 @@ export default function InventoryVault() {
             <TableBody>
               {mockWasteLogs.map((w) => (
                 <TableRow key={w.id} className="border-border hover:bg-secondary/40">
-                  <TableCell className="text-sm font-medium text-foreground">{w.itemName}</TableCell>
+                  <TableCell className="text-sm font-medium text-foreground">{w.item_name}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{w.quantity} {w.unit}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{w.reason}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground">{w.staff}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{w.staff_name}</TableCell>
                   <TableCell className="text-xs text-muted-foreground">{w.date}</TableCell>
                   <TableCell className="text-sm text-right font-medium text-destructive">${w.cost.toFixed(2)}</TableCell>
                 </TableRow>

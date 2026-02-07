@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-type Status = "Matched" | "Mismatch" | "Unpaid" | "Ghost Payment";
+export type Status = "Matched" | "Mismatch" | "Unpaid" | "Ghost Payment";
 
 const statusStyles: Record<Status, string> = {
   Matched: "bg-success/15 text-success border-success/30",

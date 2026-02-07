@@ -64,11 +64,11 @@ export async function fetchStaffMembers(): Promise<StaffMember[]> {
 }
 
 export function getKPIs() {
-  const grossSales = mockBills.reduce((s, b) => s + b.total, 0);
+  const grossSales = mockBills.reduce((s, b) => s + b.grand_total, 0);
   const vat = grossSales * 0.1;
   const serviceCharge = grossSales * 0.05;
   const netSales = grossSales - vat - serviceCharge;
-  const totalLaborCost = mockStaffMembers.reduce((s, m) => s + m.hourlyCost * m.hoursWorked, 0);
+  const totalLaborCost = mockStaffMembers.reduce((s, m) => s + m.hourly_cost * m.hours_worked, 0);
   const laborCostPct = (totalLaborCost / grossSales) * 100;
 
   return { grossSales, netSales, vat, serviceCharge, laborCostPct };
