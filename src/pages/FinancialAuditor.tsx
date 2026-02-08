@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Banknote, QrCode, CreditCard, DollarSign, Landmark, ShieldCheck, CheckCircle, AlertTriangle, XCircle, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mockBankTransactions } from "@/lib/mock-data";
+import { calcVAT, calcPLT, fmtUSD, VAT_RATE, PLT_RATE } from "@/lib/tax";
 import type { Bill } from "@/lib/mock-data";
 
 type ReconciliationStatus = "Matched" | "Mismatch" | "Missing" | "Cash" | "Manual";
@@ -26,6 +27,7 @@ const statusConfig: Record<ReconciliationStatus, { icon: typeof CheckCircle; lab
 const fmt = (n: number) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
 
+const fmtTax = (n: number) => fmtUSD(n);
 function PaymentIcon({ mode }: { mode: string }) {
   if (mode === "ABA QR") return <QrCode className="h-4 w-4 text-info" />;
   if (mode === "Card") return <CreditCard className="h-4 w-4 text-primary" />;
@@ -60,6 +62,8 @@ export default function FinancialAuditor() {
 
   const totalPOS = allBills.reduce((s, b) => s + b.grand_total, 0);
   const totalBank = allBills.reduce((s, b) => s + (getBankAmount(b) ?? 0), 0);
+  const totalVAT = allBills.reduce((s, b) => s + calcVAT(b.grand_total), 0);
+  const totalPLT = allBills.reduce((s, b) => s + calcPLT(b.grand_total), 0); // simplified: apply PLT to all for demo
   const matchedCount = allBills.filter((b) => getReconciliationStatus(b) === "Matched").length;
   const discrepancyCount = allBills.length - matchedCount;
 
@@ -150,6 +154,8 @@ export default function FinancialAuditor() {
                 <TableHead className="text-muted-foreground text-xs">Staff</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Payment Type</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-right">POS Amount</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">VAT ({(VAT_RATE * 100).toFixed(0)}%)</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">PLT ({(PLT_RATE * 100).toFixed(0)}%)</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-right">Bank Verified</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Status</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Action</TableHead>
@@ -158,7 +164,7 @@ export default function FinancialAuditor() {
             <TableBody>
               {bills.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-12">
+                  <TableCell colSpan={11} className="text-center text-sm text-muted-foreground py-12">
                     {discrepancyOnly ? "No discrepancies found 🎉" : "No transactions for this period."}
                   </TableCell>
                 </TableRow>
@@ -166,6 +172,8 @@ export default function FinancialAuditor() {
                 bills.map((b) => {
                   const status = getReconciliationStatus(b);
                   const bankAmount = getBankAmount(b);
+                  const vat = calcVAT(b.grand_total);
+                  const plt = calcPLT(b.grand_total);
                   const cfg = statusConfig[status];
                   const StatusIcon = cfg.icon;
 
@@ -183,6 +191,12 @@ export default function FinancialAuditor() {
                       </TableCell>
                       <TableCell className="text-xs text-right font-medium text-foreground">
                         ${b.grand_total.toFixed(2)}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-mono text-primary">
+                        {fmtTax(vat)}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-mono text-warning">
+                        {fmtTax(plt)}
                       </TableCell>
                       <TableCell className="text-xs text-right font-medium text-foreground">
                         {bankAmount !== null ? `$${bankAmount.toFixed(2)}` : <span className="text-muted-foreground">—</span>}
