@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { usePeriod } from "@/contexts/PeriodContext";
 import { PeriodToolbar } from "@/components/shared/PeriodToolbar";
 import { KPICard } from "@/components/shared/KPICard";
@@ -5,17 +6,21 @@ import { ExportButton } from "@/components/shared/ExportButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Banknote, QrCode, CreditCard, DollarSign, Landmark, ShieldCheck } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Banknote, QrCode, CreditCard, DollarSign, Landmark, ShieldCheck, CheckCircle, AlertTriangle, XCircle, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mockBankTransactions } from "@/lib/mock-data";
 import type { Bill } from "@/lib/mock-data";
 
-type ReconciliationStatus = "Matched" | "Missing" | "Cash - Pending Deposit";
+type ReconciliationStatus = "Matched" | "Mismatch" | "Missing" | "Cash" | "Manual";
 
-const statusConfig: Record<ReconciliationStatus, { emoji: string; className: string }> = {
-  Matched: { emoji: "✅", className: "bg-success/15 text-success border-success/30" },
-  Missing: { emoji: "❌", className: "bg-destructive/15 text-destructive border-destructive/30" },
-  "Cash - Pending Deposit": { emoji: "💵", className: "bg-warning/15 text-warning border-warning/30" },
+const statusConfig: Record<ReconciliationStatus, { icon: typeof CheckCircle; label: string; className: string; iconClass: string }> = {
+  Matched:  { icon: CheckCircle,    label: "Matched",  className: "bg-success/15 text-success border-success/30",           iconClass: "text-success" },
+  Mismatch: { icon: AlertTriangle,  label: "Mismatch", className: "bg-warning/15 text-warning border-warning/30",           iconClass: "text-warning" },
+  Missing:  { icon: XCircle,        label: "Missing",  className: "bg-destructive/15 text-destructive border-destructive/30", iconClass: "text-destructive" },
+  Cash:     { icon: Banknote,       label: "Cash",     className: "bg-info/15 text-info border-info/30",                     iconClass: "text-info" },
+  Manual:   { icon: Wrench,         label: "Manual",   className: "bg-muted text-muted-foreground border-border",            iconClass: "text-muted-foreground" },
 };
 
 const fmt = (n: number) =>
@@ -28,8 +33,10 @@ function PaymentIcon({ mode }: { mode: string }) {
 }
 
 function getReconciliationStatus(bill: Bill): ReconciliationStatus {
-  if (bill.payment_mode === "Cash") return "Cash - Pending Deposit";
+  if (bill.payment_mode === "Cash") return "Cash";
   if (bill.aba_status === "Matched") return "Matched";
+  if (bill.aba_status === "Mismatch") return "Mismatch";
+  if (bill.aba_status === "Ghost Payment") return "Manual";
   return "Missing";
 }
 
@@ -38,13 +45,33 @@ function getBankAmount(bill: Bill): number | null {
   return txn ? txn.amount : null;
 }
 
+function isDiscrepancy(status: ReconciliationStatus): boolean {
+  return status !== "Matched";
+}
+
 export default function FinancialAuditor() {
   const { stats, periodLabel } = usePeriod();
-  const bills = stats.filteredBills;
+  const [discrepancyOnly, setDiscrepancyOnly] = useState(false);
 
-  const totalPOS = bills.reduce((s, b) => s + b.grand_total, 0);
-  const totalBank = bills.reduce((s, b) => s + (getBankAmount(b) ?? 0), 0);
-  const matchedCount = bills.filter((b) => getReconciliationStatus(b) === "Matched").length;
+  const allBills = stats.filteredBills;
+  const bills = discrepancyOnly
+    ? allBills.filter((b) => isDiscrepancy(getReconciliationStatus(b)))
+    : allBills;
+
+  const totalPOS = allBills.reduce((s, b) => s + b.grand_total, 0);
+  const totalBank = allBills.reduce((s, b) => s + (getBankAmount(b) ?? 0), 0);
+  const matchedCount = allBills.filter((b) => getReconciliationStatus(b) === "Matched").length;
+  const discrepancyCount = allBills.length - matchedCount;
+
+  // Status breakdown counts
+  const statusCounts = allBills.reduce<Record<ReconciliationStatus, number>>(
+    (acc, b) => {
+      const s = getReconciliationStatus(b);
+      acc[s] = (acc[s] || 0) + 1;
+      return acc;
+    },
+    { Matched: 0, Mismatch: 0, Missing: 0, Cash: 0, Manual: 0 }
+  );
 
   return (
     <div className="space-y-6">
@@ -66,7 +93,7 @@ export default function FinancialAuditor() {
           title="Total POS Sales"
           value={fmt(totalPOS)}
           icon={DollarSign}
-          trendValue={`${bills.length} transactions`}
+          trendValue={`${allBills.length} transactions`}
         />
         <KPICard
           title="Total Bank Verified"
@@ -77,11 +104,38 @@ export default function FinancialAuditor() {
         />
         <KPICard
           title="Reconciliation"
-          value={`${bills.length > 0 ? ((matchedCount / bills.length) * 100).toFixed(0) : 0}%`}
+          value={`${allBills.length > 0 ? ((matchedCount / allBills.length) * 100).toFixed(0) : 0}%`}
           icon={ShieldCheck}
-          trend={matchedCount === bills.length ? "up" : "down"}
-          trendValue={`${matchedCount}/${bills.length} matched`}
+          trend={matchedCount === allBills.length ? "up" : "down"}
+          trendValue={`${matchedCount}/${allBills.length} matched`}
         />
+      </div>
+
+      {/* Status Legend + Discrepancy Toggle */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-3">
+          {(Object.entries(statusConfig) as [ReconciliationStatus, typeof statusConfig.Matched][]).map(([key, cfg]) => {
+            const Icon = cfg.icon;
+            return (
+              <div key={key} className="flex items-center gap-1.5 text-xs">
+                <Icon className={cn("h-3.5 w-3.5", cfg.iconClass)} />
+                <span className="text-muted-foreground">{cfg.label}</span>
+                <span className="font-medium text-foreground">{statusCounts[key]}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Switch
+            id="discrepancy-toggle"
+            checked={discrepancyOnly}
+            onCheckedChange={setDiscrepancyOnly}
+          />
+          <Label htmlFor="discrepancy-toggle" className="text-xs text-muted-foreground cursor-pointer">
+            Discrepancy Only ({discrepancyCount})
+          </Label>
+        </div>
       </div>
 
       {/* Table */}
@@ -96,7 +150,7 @@ export default function FinancialAuditor() {
                 <TableHead className="text-muted-foreground text-xs">Staff</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Payment Type</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-right">POS Amount</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-right">Bank Verified Amount</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">Bank Verified</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Status</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-center">Action</TableHead>
               </TableRow>
@@ -105,7 +159,7 @@ export default function FinancialAuditor() {
               {bills.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-12">
-                    No transactions for this period.
+                    {discrepancyOnly ? "No discrepancies found 🎉" : "No transactions for this period."}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -113,6 +167,7 @@ export default function FinancialAuditor() {
                   const status = getReconciliationStatus(b);
                   const bankAmount = getBankAmount(b);
                   const cfg = statusConfig[status];
+                  const StatusIcon = cfg.icon;
 
                   return (
                     <TableRow key={b.bill_id} className="border-border hover:bg-secondary/40">
@@ -133,8 +188,9 @@ export default function FinancialAuditor() {
                         {bankAmount !== null ? `$${bankAmount.toFixed(2)}` : <span className="text-muted-foreground">—</span>}
                       </TableCell>
                       <TableCell className="text-center">
-                        <Badge variant="outline" className={cn("font-medium text-xs", cfg.className)}>
-                          {cfg.emoji} {status}
+                        <Badge variant="outline" className={cn("font-medium text-xs gap-1", cfg.className)}>
+                          <StatusIcon className="h-3 w-3" />
+                          {cfg.label}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
