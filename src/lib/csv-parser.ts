@@ -1,4 +1,4 @@
-// Generic CSV parsing engine with specific parsers for each report type.
+// Generic CSV / TSV parsing engine with specific parsers for each report type.
 
 export interface ParsedCSVRow {
   [key: string]: string;
@@ -30,6 +30,14 @@ export function parseCSVRaw(text: string): string[][] {
 }
 
 /**
+ * Parse TSV text into an array of string arrays (rows × columns).
+ */
+export function parseTSVRaw(text: string): string[][] {
+  const lines = text.trim().split(/\r?\n/);
+  return lines.map((line) => line.split("\t").map((c) => c.trim()));
+}
+
+/**
  * Parse CSV text with a header row into keyed objects.
  */
 export function parseCSVWithHeaders(text: string): ParsedCSVRow[] {
@@ -47,9 +55,9 @@ export function parseCSVWithHeaders(text: string): ParsedCSVRow[] {
 
 // ─── Helpers ────────────────────────────────────────────────
 
-/** Clean accounting-format numbers: "(1,234)" → -1234, "1,234" → 1234 */
+/** Clean accounting-format numbers: "(1,234)" → -1234, "1,234" → 1234, "- " → 0 */
 export function parseAccountingNumber(raw: string): number {
-  if (!raw || raw.trim() === "-" || raw.trim() === "") return 0;
+  if (!raw || raw.trim() === "-" || raw.trim() === "" || raw.trim() === "-   ") return 0;
   let cleaned = raw.replace(/\s/g, "").replace(/,/g, "");
   let negative = false;
   if (cleaned.startsWith("(") && cleaned.endsWith(")")) {
@@ -97,7 +105,6 @@ export function parseIncomeStatement(text: string): IncomeStatement {
     const pctRaw = cols[2] ?? "";
     const noteRaw = cols[3] ?? "";
 
-    // Period header (date row)
     if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(label)) {
       period = label;
       continue;
@@ -108,130 +115,238 @@ export function parseIncomeStatement(text: string): IncomeStatement {
 
     const amount = parseAccountingNumber(amountRaw);
 
-    if (label === "Revenue") {
-      revenue = amount;
-      pastRevenue = true;
-      continue;
-    }
-
-    if (label === "Total Expense") {
-      totalExpense = Math.abs(amount);
-      pastTotalExpense = true;
-      continue;
-    }
-
-    if (label.startsWith("Gross profit")) {
-      grossProfit = amount;
-      continue;
-    }
-
+    if (label === "Revenue") { revenue = amount; pastRevenue = true; continue; }
+    if (label === "Total Expense") { totalExpense = Math.abs(amount); pastTotalExpense = true; continue; }
+    if (label.startsWith("Gross profit")) { grossProfit = amount; continue; }
     if (label.startsWith("Profit share")) {
       profitShares.push({ name: label.replace("Profit share-", ""), amount });
       continue;
     }
 
-    // Expense lines (between Revenue and Total Expense)
     if (pastRevenue && !pastTotalExpense && label) {
       const pct = pctRaw ? parseFloat(pctRaw.replace("%", "")) : null;
-      expenses.push({
-        category: label,
-        amount: Math.abs(amount),
-        percentage: pct,
-        note: noteRaw,
-      });
+      expenses.push({ category: label, amount: Math.abs(amount), percentage: pct, note: noteRaw });
     }
   }
 
   return { period, revenue, expenses, totalExpense, grossProfit, profitShares };
 }
 
-// ─── Sales CSV Parser (placeholder for when file is uploaded) ────
+// ─── MobiPOS Item Sales Report Parser ───────────────────────
+// Format: 6 header rows, then row 8 = column headers
+// Columns: (empty), Category, Item Name, Qty, Price, Discount, Bill Discount, Cost, Total Sales, Category Total
 
 export interface SalesRecord {
-  bill_id: string;
-  date: string;
   category: string;
-  total_sales: number;
+  item_name: string;
+  qty: number;
+  price: number;
   discount: number;
   bill_discount: number;
+  cost: number;
+  total_sales: number;
   net_revenue: number;
 }
 
 export function parseSalesCSV(text: string): SalesRecord[] {
-  const rows = parseCSVWithHeaders(text);
-  return rows.map((r) => {
-    const totalSales = parseAccountingNumber(r["Total Sales"] || r["Total"] || "0");
-    const discount = parseAccountingNumber(r["Discount"] || "0");
-    const billDiscount = parseAccountingNumber(r["Bill Discount"] || "0");
-    return {
-      bill_id: r["Bill ID"] || r["Bill No"] || r["No"] || "",
-      date: r["Date"] || "",
-      category: r["Category"] || "",
+  const rows = parseCSVRaw(text);
+  const records: SalesRecord[] = [];
+
+  // Find the header row (contains "Category" and "Item Name")
+  let dataStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i].map((c) => c.toLowerCase());
+    if (row.includes("category") && row.includes("item name")) {
+      dataStart = i + 1;
+      break;
+    }
+  }
+  if (dataStart < 0) return records;
+
+  for (let i = dataStart; i < rows.length; i++) {
+    const cols = rows[i];
+    const category = (cols[1] ?? "").trim();
+    const itemName = (cols[2] ?? "").trim();
+
+    // Skip empty rows, summary rows (Total Quantity / Sales)
+    if (!category || !itemName) continue;
+    if (category.toLowerCase().startsWith("total")) continue;
+
+    const qty = parseAccountingNumber(cols[3] ?? "0");
+    const price = parseAccountingNumber(cols[4] ?? "0");
+    const discount = Math.abs(parseAccountingNumber(cols[5] ?? "0"));
+    const billDiscount = Math.abs(parseAccountingNumber(cols[6] ?? "0"));
+    const cost = parseAccountingNumber(cols[7] ?? "0");
+    const totalSales = parseAccountingNumber(cols[8] ?? "0");
+
+    // Skip zero-sale items
+    if (totalSales === 0 && qty === 0) continue;
+
+    records.push({
+      category,
+      item_name: itemName,
+      qty,
+      price,
+      discount,
+      bill_discount: billDiscount,
+      cost,
       total_sales: totalSales,
-      discount: Math.abs(discount),
-      bill_discount: Math.abs(billDiscount),
-      net_revenue: totalSales - Math.abs(discount) - Math.abs(billDiscount),
-    };
-  });
+      net_revenue: price - discount - billDiscount,
+    });
+  }
+
+  return records;
 }
 
-// ─── Bank Statement Parser (placeholder) ────────────────────
+// ─── ABA Bank Statement Parser ──────────────────────────────
+// Format: Row 1 = "ACCOUNT ACTIVITY", Row 2 = blank, Row 3 = headers
+// Columns: Date, Transaction Details, Money In, Ccy, Money Out, Ccy, Balance, Ccy
 
 export interface BankStatementRecord {
   date: string;
   transaction_details: string;
   money_in: number;
   money_out: number;
+  currency: string;
+  balance: number;
   remark: string;
   matched_bill_id: string | null;
 }
 
 export function parseBankStatementCSV(text: string): BankStatementRecord[] {
-  const rows = parseCSVWithHeaders(text);
-  return rows.map((r) => {
-    const remark = r["Remark"] || r["Description"] || "";
-    // Try to extract bill ID from remark text
-    const billMatch = remark.match(/(?:Bill|B|#)\s*(\d+)/i);
-    return {
-      date: r["Date"] || r["Transaction Date"] || "",
-      transaction_details: r["Transaction Details"] || r["Details"] || "",
-      money_in: parseAccountingNumber(r["Money In"] || r["Credit"] || "0"),
-      money_out: parseAccountingNumber(r["Money Out"] || r["Debit"] || "0"),
+  const rows = parseCSVRaw(text);
+  const records: BankStatementRecord[] = [];
+
+  // Find header row with "Date" and "Transaction Details"
+  let dataStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some((c) => c === "Date") && rows[i].some((c) => c === "Transaction Details")) {
+      dataStart = i + 1;
+      break;
+    }
+  }
+  if (dataStart < 0) return records;
+
+  for (let i = dataStart; i < rows.length; i++) {
+    const cols = rows[i];
+    const date = (cols[0] ?? "").trim();
+    const details = (cols[1] ?? "").trim();
+
+    if (!date || !details) continue;
+
+    const moneyIn = parseAccountingNumber(cols[2] ?? "0");
+    const ccy = (cols[3] ?? "USD").trim();
+    const moneyOut = parseAccountingNumber(cols[4] ?? "0");
+    const balance = parseAccountingNumber(cols[6] ?? "0");
+
+    // Extract remark from transaction details (text after "REMARK:")
+    const remarkMatch = details.match(/REMARK:\s*(.+?)(?:\s{2,}|REF#|PURCHASE#|$)/i);
+    const remark = remarkMatch ? remarkMatch[1].trim() : "";
+
+    // Try to extract bill ID from remark or details
+    const billMatch = details.match(/(?:Bill|B|#)\s*(\d{5,})/i);
+
+    records.push({
+      date,
+      transaction_details: details,
+      money_in: moneyIn,
+      money_out: moneyOut,
+      currency: ccy || "USD",
+      balance,
       remark,
       matched_bill_id: billMatch ? billMatch[1] : null,
-    };
-  });
+    });
+  }
+
+  return records;
 }
 
-// ─── Inventory CSV Parser (placeholder) ─────────────────────
+// ─── Inventory TSV Parser ───────────────────────────────────
+// Tab-separated. 4 header rows, data from row 5.
+// Columns (tab-indexed): 0=marker, 1=category, 2=subcategory, 3=item code,
+// 4=display name, 5=UOM, 6=opening QTY, 7=Purchase, 8=Sale,
+// 9=Balance QTY, 10=Physical QTY, 11=Diff, 12=COG,
+// 13=Consumption, 14=Lost, 15=Total COG, 16=Purchase cost, 17=Remark, 18=Action
 
 export interface InventoryRecord {
   item_name: string;
   category: string;
   unit: string;
+  opening_qty: number;
+  purchases: number;
+  sales: number;
   system_qty: number;
   physical_qty: number;
-  lost_qty: number;
+  diff: number;
   cog: number;
-  loss_value: number;
+  consumption: number;
+  lost_value: number;
+  total_cog: number;
+  purchase_cost: number;
+  remark: string;
+  action: string;
 }
 
-export function parseInventoryCSV(text: string): InventoryRecord[] {
-  const rows = parseCSVWithHeaders(text);
-  return rows.map((r) => {
-    const systemQty = parseAccountingNumber(r["System QTY"] || r["System Qty"] || "0");
-    const physicalQty = parseAccountingNumber(r["Physical QTY"] || r["Physical Qty"] || "0");
-    const lostQty = physicalQty - systemQty;
-    const cog = parseAccountingNumber(r["COG"] || r["Cost"] || r["Unit Cost"] || "0");
-    return {
-      item_name: r["Item"] || r["Item Name"] || r["Name"] || "",
-      category: r["Category"] || "",
-      unit: r["Unit"] || "",
+export function parseInventoryTSV(text: string): InventoryRecord[] {
+  const rows = parseTSVRaw(text);
+  const records: InventoryRecord[] = [];
+
+  // Skip the first 4 header rows, start at row index 4
+  for (let i = 4; i < rows.length; i++) {
+    const cols = rows[i];
+    const itemName = (cols[4] ?? "").trim();
+
+    // Skip empty or summary rows
+    if (!itemName) continue;
+    // Skip totals row at end
+    if (cols.every((c) => !c || /^[\d.,\s()-]+$/.test(c)) && !itemName) continue;
+
+    const category = (cols[1] ?? "").trim();
+    const unit = (cols[5] ?? "").trim();
+    const openingQty = parseAccountingNumber(cols[6] ?? "0");
+    const purchases = parseAccountingNumber(cols[7] ?? "0");
+    const sales = parseAccountingNumber(cols[8] ?? "0");
+    const systemQty = parseAccountingNumber(cols[9] ?? "0");
+    const physicalQty = parseAccountingNumber(cols[10] ?? "0");
+    const diff = parseAccountingNumber(cols[11] ?? "0");
+    const cog = parseAccountingNumber(cols[12] ?? "0");
+    const consumption = parseAccountingNumber(cols[13] ?? "0");
+    const lostValue = parseAccountingNumber(cols[14] ?? "0");
+    const totalCog = parseAccountingNumber(cols[15] ?? "0");
+    const purchaseCost = parseAccountingNumber(cols[16] ?? "0");
+    const remark = (cols[17] ?? "").trim();
+    const action = (cols[18] ?? "").trim();
+
+    records.push({
+      item_name: itemName,
+      category: category || "Uncategorized",
+      unit,
+      opening_qty: openingQty,
+      purchases,
+      sales,
       system_qty: systemQty,
       physical_qty: physicalQty,
-      lost_qty: lostQty,
+      diff,
       cog,
-      loss_value: Math.abs(lostQty) * cog,
-    };
-  });
+      consumption,
+      lost_value: lostValue,
+      total_cog: totalCog,
+      purchase_cost: purchaseCost,
+      remark,
+      action,
+    });
+  }
+
+  return records;
+}
+
+// Keep the old parseInventoryCSV name as alias for backward compat
+export function parseInventoryCSV(text: string): InventoryRecord[] {
+  // Auto-detect TSV vs CSV
+  const firstLine = text.split(/\r?\n/)[0] ?? "";
+  if (firstLine.includes("\t")) {
+    return parseInventoryTSV(text);
+  }
+  // Fallback: try TSV anyway (some CSV exports use tabs)
+  return parseInventoryTSV(text);
 }
