@@ -9,6 +9,8 @@ import {
   Warehouse,
   Users,
   Settings,
+  BarChart3,
+  Database,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -23,6 +25,8 @@ const navItems = [
   { title: "Menu & COGS", url: "/menu-cogs", icon: UtensilsCrossed },
   { title: "Inventory Vault", url: "/inventory", icon: Warehouse },
   { title: "Staff Intelligence", url: "/staff", icon: Users },
+  { title: "Profit & Loss", url: "/profit-loss", icon: BarChart3 },
+  { title: "Data Tools", url: "/data-tools", icon: Database },
   { title: "Admin Settings", url: "/settings", icon: Settings },
 ];
 
