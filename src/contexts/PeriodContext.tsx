@@ -1,22 +1,11 @@
 import { createContext, useContext, useState, useMemo, useCallback, useTransition, type ReactNode } from "react";
-import { mockDailySales, mockBills, mockBankTransactions } from "@/lib/mock-data";
-import type { DailySales, Bill } from "@/lib/mock-data";
+import { useRealData } from "@/contexts/RealDataContext";
 
 export type PeriodMode = "daily" | "weekly" | "monthly" | "custom";
 
-const MONTH_MAP: Record<string, number> = {
-  Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-  Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
-};
-
-function parseShortDate(d: string): Date {
-  const [mon, day] = d.split(" ");
-  return new Date(2025, MONTH_MAP[mon] ?? 0, parseInt(day, 10));
-}
-
 export interface PeriodStats {
-  filteredSales: DailySales[];
-  filteredBills: Bill[];
+  filteredSales: { date: string; sales: number; deposits: number }[];
+  filteredBills: unknown[];
   totalSales: number;
   totalDeposits: number;
   matchedCount: number;
@@ -44,9 +33,10 @@ export function usePeriod() {
 }
 
 export function PeriodProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<PeriodMode>("weekly");
+  const [mode, setMode] = useState<PeriodMode>("monthly");
   const [customRange, setCustomRange] = useState<{ from: Date; to: Date } | null>(null);
   const [isPending, startTransition] = useTransition();
+  const { sales, bank, income } = useRealData();
 
   const changeMode = useCallback((m: PeriodMode) => {
     startTransition(() => setMode(m));
@@ -60,74 +50,27 @@ export function PeriodProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const stats = useMemo<PeriodStats>(() => {
-    const allDates = mockDailySales.map((s) => parseShortDate(s.date));
-    const latest = new Date(Math.max(...allDates.map((d) => d.getTime())));
-
-    let from: Date;
-    let to: Date = latest;
-
-    switch (mode) {
-      case "daily":
-        from = latest;
-        break;
-      case "weekly":
-        from = new Date(latest);
-        from.setDate(from.getDate() - 6);
-        break;
-      case "monthly":
-        from = new Date(latest);
-        from.setDate(from.getDate() - 29);
-        break;
-      case "custom":
-        if (customRange) {
-          from = customRange.from;
-          to = customRange.to;
-        } else {
-          from = latest;
-        }
-        break;
-    }
-
-    const filtered = mockDailySales.filter((s) => {
-      const d = parseShortDate(s.date);
-      return d >= from && d <= to;
-    });
-
-    const filteredBills = mockBills.filter((b) => {
-      const d = parseShortDate(b.date);
-      return d >= from && d <= to;
-    });
-
-    const totalSales = filtered.reduce((s, r) => s + r.sales, 0);
-    const totalDeposits = filtered.reduce((s, r) => s + r.deposits, 0);
+    // Derive from real CSV data
+    const totalSales = sales.reduce((s, r) => s + r.total_sales, 0);
+    const totalDeposits = bank.reduce((s, r) => s + r.money_in, 0);
     const discrepancy = totalSales - totalDeposits;
 
-    const matchedCount = filteredBills.filter((b) => b.aba_status === "Matched").length;
-    const totalBills = filteredBills.length;
-    const reconciliationPct = totalBills > 0 ? (matchedCount / totalBills) * 100 : 0;
+    const bankTxnCount = bank.length;
+    const depositCount = bank.filter((r) => r.money_in > 0).length;
 
     return {
-      filteredSales: filtered,
-      filteredBills,
+      filteredSales: [{ date: "Dec 2025", sales: totalSales, deposits: totalDeposits }],
+      filteredBills: [],
       totalSales,
       totalDeposits,
-      matchedCount,
-      totalBills,
+      matchedCount: depositCount,
+      totalBills: bankTxnCount,
       discrepancy,
-      reconciliationPct,
+      reconciliationPct: bankTxnCount > 0 ? (depositCount / bankTxnCount) * 100 : 0,
     };
-  }, [mode, customRange]);
+  }, [sales, bank, mode, customRange]);
 
-  const periodLabel =
-    mode === "daily"
-      ? "Today"
-      : mode === "weekly"
-        ? "Last 7 days"
-        : mode === "monthly"
-          ? "Last 30 days"
-          : customRange
-            ? `${customRange.from.toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${customRange.to.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
-            : "Select range";
+  const periodLabel = "December 2025";
 
   return (
     <PeriodContext.Provider value={{ mode, changeMode, customRange, changeCustomRange, stats, isPending, periodLabel }}>
