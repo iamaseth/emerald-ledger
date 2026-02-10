@@ -1,81 +1,43 @@
 import { useState } from "react";
-import { usePeriod } from "@/contexts/PeriodContext";
-import { PeriodToolbar } from "@/components/shared/PeriodToolbar";
+import { useRealData } from "@/contexts/RealDataContext";
 import { KPICard } from "@/components/shared/KPICard";
 import { ExportButton } from "@/components/shared/ExportButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Banknote, QrCode, CreditCard, DollarSign, Landmark, ShieldCheck, CheckCircle, AlertTriangle, XCircle, Wrench } from "lucide-react";
+import { DollarSign, Landmark, ShieldCheck, ArrowUpRight, ArrowDownRight, FileSpreadsheet } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { mockBankTransactions } from "@/lib/mock-data";
-import { calcVAT, calcPLT, fmtUSD, VAT_RATE, PLT_RATE } from "@/lib/tax";
-import type { Bill } from "@/lib/mock-data";
-
-type ReconciliationStatus = "Matched" | "Mismatch" | "Missing" | "Cash" | "Manual";
-
-const statusConfig: Record<ReconciliationStatus, { icon: typeof CheckCircle; label: string; className: string; iconClass: string }> = {
-  Matched:  { icon: CheckCircle,    label: "Matched",  className: "bg-success/15 text-success border-success/30",           iconClass: "text-success" },
-  Mismatch: { icon: AlertTriangle,  label: "Mismatch", className: "bg-warning/15 text-warning border-warning/30",           iconClass: "text-warning" },
-  Missing:  { icon: XCircle,        label: "Missing",  className: "bg-destructive/15 text-destructive border-destructive/30", iconClass: "text-destructive" },
-  Cash:     { icon: Banknote,       label: "Cash",     className: "bg-info/15 text-info border-info/30",                     iconClass: "text-info" },
-  Manual:   { icon: Wrench,         label: "Manual",   className: "bg-muted text-muted-foreground border-border",            iconClass: "text-muted-foreground" },
-};
+import { fmtUSD } from "@/lib/tax";
 
 const fmt = (n: number) =>
-  `$${n.toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
-
-const fmtTax = (n: number) => fmtUSD(n);
-function PaymentIcon({ mode }: { mode: string }) {
-  if (mode === "ABA QR") return <QrCode className="h-4 w-4 text-info" />;
-  if (mode === "Card") return <CreditCard className="h-4 w-4 text-primary" />;
-  return <Banknote className="h-4 w-4 text-success" />;
-}
-
-function getReconciliationStatus(bill: Bill): ReconciliationStatus {
-  if (bill.payment_mode === "Cash") return "Cash";
-  if (bill.aba_status === "Matched") return "Matched";
-  if (bill.aba_status === "Mismatch") return "Mismatch";
-  if (bill.aba_status === "Ghost Payment") return "Manual";
-  return "Missing";
-}
-
-function getBankAmount(bill: Bill): number | null {
-  const txn = mockBankTransactions.find((t) => t.matched_bill_id === bill.bill_id);
-  return txn ? txn.amount : null;
-}
-
-function isDiscrepancy(status: ReconciliationStatus): boolean {
-  return status !== "Matched";
-}
+  `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
 export default function FinancialAuditor() {
-  const { stats, periodLabel } = usePeriod();
-  const [discrepancyOnly, setDiscrepancyOnly] = useState(false);
+  const { sales, bank, loading } = useRealData();
+  const [showExpensesOnly, setShowExpensesOnly] = useState(false);
 
-  const allBills = stats.filteredBills;
-  const bills = discrepancyOnly
-    ? allBills.filter((b) => isDiscrepancy(getReconciliationStatus(b)))
-    : allBills;
+  // Derive KPIs from real data
+  const totalSalesRevenue = sales.reduce((s, r) => s + r.total_sales, 0);
+  const totalNetRevenue = sales.reduce((s, r) => s + r.net_revenue, 0);
+  const totalBankIn = bank.reduce((s, r) => s + r.money_in, 0);
+  const totalBankOut = bank.reduce((s, r) => s + r.money_out, 0);
+  const netBankFlow = totalBankIn - totalBankOut;
 
-  const totalPOS = allBills.reduce((s, b) => s + b.grand_total, 0);
-  const totalBank = allBills.reduce((s, b) => s + (getBankAmount(b) ?? 0), 0);
-  const totalVAT = allBills.reduce((s, b) => s + calcVAT(b.grand_total), 0);
-  const totalPLT = allBills.reduce((s, b) => s + calcPLT(b.grand_total), 0); // simplified: apply PLT to all for demo
-  const matchedCount = allBills.filter((b) => getReconciliationStatus(b) === "Matched").length;
-  const discrepancyCount = allBills.length - matchedCount;
+  const filteredBank = showExpensesOnly
+    ? bank.filter((r) => r.money_out > 0)
+    : bank;
 
-  // Status breakdown counts
-  const statusCounts = allBills.reduce<Record<ReconciliationStatus, number>>(
-    (acc, b) => {
-      const s = getReconciliationStatus(b);
-      acc[s] = (acc[s] || 0) + 1;
-      return acc;
-    },
-    { Matched: 0, Mismatch: 0, Missing: 0, Cash: 0, Manual: 0 }
-  );
+  const expenseCount = bank.filter((r) => r.money_out > 0).length;
+  const depositCount = bank.filter((r) => r.money_in > 0).length;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -83,134 +45,133 @@ export default function FinancialAuditor() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-foreground">Financial Auditor</h1>
-          <p className="text-sm text-muted-foreground">POS ↔ Bank reconciliation — {periodLabel}</p>
+          <p className="text-sm text-muted-foreground">December 2025 — POS Sales vs Bank Activity</p>
         </div>
         <ExportButton label="Export Excel" />
       </div>
 
-      {/* Global Period Toggle */}
-      <PeriodToolbar />
-
       {/* Summary Cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
         <KPICard
           title="Total POS Sales"
-          value={fmt(totalPOS)}
+          value={fmt(totalSalesRevenue)}
           icon={DollarSign}
-          trendValue={`${allBills.length} transactions`}
+          trendValue={`${sales.length} items`}
         />
         <KPICard
-          title="Total Bank Verified"
-          value={fmt(totalBank)}
+          title="Net Revenue"
+          value={fmt(totalNetRevenue)}
+          icon={DollarSign}
+          trend="up"
+          trendValue={`After discounts`}
+        />
+        <KPICard
+          title="Bank Deposits"
+          value={fmt(totalBankIn)}
           icon={Landmark}
-          trend={totalBank >= totalPOS ? "up" : "down"}
-          trendValue={`${((totalBank / Math.max(totalPOS, 1)) * 100).toFixed(1)}% of POS`}
+          trend="up"
+          trendValue={`${depositCount} deposits`}
         />
         <KPICard
-          title="Reconciliation"
-          value={`${allBills.length > 0 ? ((matchedCount / allBills.length) * 100).toFixed(0) : 0}%`}
+          title="Bank Expenses"
+          value={fmt(totalBankOut)}
           icon={ShieldCheck}
-          trend={matchedCount === allBills.length ? "up" : "down"}
-          trendValue={`${matchedCount}/${allBills.length} matched`}
+          trend="down"
+          trendValue={`${expenseCount} transactions`}
         />
       </div>
 
-      {/* Status Legend + Discrepancy Toggle */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          {(Object.entries(statusConfig) as [ReconciliationStatus, typeof statusConfig.Matched][]).map(([key, cfg]) => {
-            const Icon = cfg.icon;
-            return (
-              <div key={key} className="flex items-center gap-1.5 text-xs">
-                <Icon className={cn("h-3.5 w-3.5", cfg.iconClass)} />
-                <span className="text-muted-foreground">{cfg.label}</span>
-                <span className="font-medium text-foreground">{statusCounts[key]}</span>
-              </div>
-            );
-          })}
+      {/* Toggle */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5">
+            <ArrowUpRight className="h-3.5 w-3.5 text-success" />
+            <span>Deposits: {depositCount}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <ArrowDownRight className="h-3.5 w-3.5 text-destructive" />
+            <span>Expenses: {expenseCount}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <FileSpreadsheet className="h-3.5 w-3.5 text-primary" />
+            <span>Net: {fmt(netBankFlow)}</span>
+          </div>
         </div>
-
         <div className="flex items-center gap-2">
           <Switch
-            id="discrepancy-toggle"
-            checked={discrepancyOnly}
-            onCheckedChange={setDiscrepancyOnly}
+            id="expense-toggle"
+            checked={showExpensesOnly}
+            onCheckedChange={setShowExpensesOnly}
           />
-          <Label htmlFor="discrepancy-toggle" className="text-xs text-muted-foreground cursor-pointer">
-            Discrepancy Only ({discrepancyCount})
+          <Label htmlFor="expense-toggle" className="text-xs text-muted-foreground cursor-pointer">
+            Expenses Only ({expenseCount})
           </Label>
         </div>
       </div>
 
-      {/* Table */}
+      {/* Bank Transactions Table */}
       <div className="glass-card overflow-hidden">
         <div className="overflow-auto">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent border-border">
-                <TableHead className="text-muted-foreground text-xs">Bill ID</TableHead>
                 <TableHead className="text-muted-foreground text-xs">Date</TableHead>
-                <TableHead className="text-muted-foreground text-xs">Time</TableHead>
-                <TableHead className="text-muted-foreground text-xs">Staff</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-center">Payment Type</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-right">POS Amount</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-right">VAT ({(VAT_RATE * 100).toFixed(0)}%)</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-right">PLT ({(PLT_RATE * 100).toFixed(0)}%)</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-right">Bank Verified</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-center">Status</TableHead>
-                <TableHead className="text-muted-foreground text-xs text-center">Action</TableHead>
+                <TableHead className="text-muted-foreground text-xs">Transaction Details</TableHead>
+                <TableHead className="text-muted-foreground text-xs">Remark</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">Money In</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">Money Out</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-right">Balance</TableHead>
+                <TableHead className="text-muted-foreground text-xs text-center">Type</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {bills.length === 0 ? (
+              {filteredBank.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={11} className="text-center text-sm text-muted-foreground py-12">
-                    {discrepancyOnly ? "No discrepancies found 🎉" : "No transactions for this period."}
+                  <TableCell colSpan={7} className="text-center text-sm text-muted-foreground py-12">
+                    No transactions found.
                   </TableCell>
                 </TableRow>
               ) : (
-                bills.map((b) => {
-                  const status = getReconciliationStatus(b);
-                  const bankAmount = getBankAmount(b);
-                  const vat = calcVAT(b.grand_total);
-                  const plt = calcPLT(b.grand_total);
-                  const cfg = statusConfig[status];
-                  const StatusIcon = cfg.icon;
-
+                filteredBank.map((txn, i) => {
+                  const isDeposit = txn.money_in > 0;
                   return (
-                    <TableRow key={b.bill_id} className="border-border hover:bg-secondary/40">
-                      <TableCell className="font-mono text-xs text-foreground">{b.bill_id}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">{b.date}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">{b.timestamp}</TableCell>
-                      <TableCell className="text-xs text-muted-foreground">{b.staff_name}</TableCell>
+                    <TableRow key={i} className="border-border hover:bg-secondary/40">
+                      <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{txn.date}</TableCell>
+                      <TableCell className="text-xs text-foreground max-w-[300px] truncate" title={txn.transaction_details}>
+                        {txn.transaction_details.slice(0, 80)}…
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground max-w-[150px] truncate" title={txn.remark}>
+                        {txn.remark || "—"}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-medium">
+                        {txn.money_in > 0 ? (
+                          <span className="text-success">{fmt(txn.money_in)}</span>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-medium">
+                        {txn.money_out > 0 ? (
+                          <span className="text-destructive">{fmt(txn.money_out)}</span>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-mono text-foreground">
+                        {fmt(txn.balance)}
+                      </TableCell>
                       <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <PaymentIcon mode={b.payment_mode} />
-                          <span className="text-xs text-muted-foreground">{b.payment_mode}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-medium text-foreground">
-                        ${b.grand_total.toFixed(2)}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-mono text-primary">
-                        {fmtTax(vat)}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-mono text-warning">
-                        {fmtTax(plt)}
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-medium text-foreground">
-                        {bankAmount !== null ? `$${bankAmount.toFixed(2)}` : <span className="text-muted-foreground">—</span>}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge variant="outline" className={cn("font-medium text-xs gap-1", cfg.className)}>
-                          <StatusIcon className="h-3 w-3" />
-                          {cfg.label}
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-[10px] font-medium",
+                            isDeposit
+                              ? "bg-success/15 text-success border-success/30"
+                              : "bg-destructive/15 text-destructive border-destructive/30"
+                          )}
+                        >
+                          {isDeposit ? "Deposit" : "Expense"}
                         </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Button variant="ghost" size="sm" className="text-xs h-7">
-                          {status === "Matched" ? "View Receipt" : "Manual Verify"}
-                        </Button>
                       </TableCell>
                     </TableRow>
                   );
