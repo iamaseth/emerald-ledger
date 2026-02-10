@@ -11,6 +11,7 @@ import {
   Settings,
   BarChart3,
   Database,
+  FileText,
   ChevronLeft,
   ChevronRight,
   Menu,
