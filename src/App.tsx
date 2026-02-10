@@ -14,6 +14,7 @@ import InventoryVault from "./pages/InventoryVault";
 import StaffIntelligence from "./pages/StaffIntelligence";
 import AdminSettings from "./pages/AdminSettings";
 import ProfitLoss from "./pages/ProfitLoss";
+import AccountsPayable from "./pages/AccountsPayable";
 import DataTools from "./pages/DataTools";
 import NotFound from "./pages/NotFound";
 
