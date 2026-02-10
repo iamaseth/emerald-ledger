@@ -47,7 +47,6 @@ function DatePickerField({ label, value, onChange }: { label: string; value: Dat
 
 export default function AccountsPayable() {
   const { invoices, addInvoice, recordPayment, updateInvoice, deleteInvoice } = useAccountsPayable();
-  const { settings } = useSettings();
 
   // Form state
   const [showForm, setShowForm] = useState(false);

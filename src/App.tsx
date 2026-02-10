@@ -36,6 +36,7 @@ const App = () => (
               <Route path="/menu-cogs" element={<MenuCogs />} />
               <Route path="/inventory" element={<InventoryVault />} />
               <Route path="/staff" element={<StaffIntelligence />} />
+              <Route path="/accounts-payable" element={<AccountsPayable />} />
               <Route path="/profit-loss" element={<ProfitLoss />} />
               <Route path="/data-tools" element={<DataTools />} />
               <Route path="/settings" element={<AdminSettings />} />
