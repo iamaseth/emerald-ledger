@@ -5,7 +5,7 @@ export type PeriodMode = "daily" | "weekly" | "monthly" | "custom";
 
 export interface PeriodStats {
   filteredSales: { date: string; sales: number; deposits: number }[];
-  filteredBills: never[];
+  filteredBills: unknown[];
   totalSales: number;
   totalDeposits: number;
   matchedCount: number;
