@@ -55,7 +55,7 @@ export function AppSidebar({ mobileOpen, onMobileClose }: AppSidebarProps) {
         </div>
         {(!collapsed || mobileOpen) && (
           <span className="text-sm font-bold tracking-tight text-foreground">
-            RestoEMS
+            Backstreet Bassac Lane
           </span>
         )}
         {/* Close button for mobile drawer */}
