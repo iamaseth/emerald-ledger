@@ -15,7 +15,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { useAccountsPayable, type APInvoice } from "@/hooks/useAccountsPayable";
-import { useSettings } from "@/contexts/SettingsContext";
 import { toast } from "@/hooks/use-toast";
 
 const CATEGORIES = ["Food", "Liquor", "Beer", "Wine", "Supplies", "Equipment", "Rent", "Utilities", "Marketing", "Other"];
