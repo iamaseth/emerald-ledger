@@ -343,10 +343,70 @@ export function parseInventoryTSV(text: string): InventoryRecord[] {
 // Keep the old parseInventoryCSV name as alias for backward compat
 export function parseInventoryCSV(text: string): InventoryRecord[] {
   // Auto-detect TSV vs CSV
-  const firstLine = text.split(/\r?\n/)[0] ?? "";
-  if (firstLine.includes("\t")) {
+  const firstDataLine = text.split(/\r?\n/).find(l => l.trim().length > 10) ?? "";
+  const tabCount = (firstDataLine.match(/\t/g) || []).length;
+  const commaCount = (firstDataLine.match(/,/g) || []).length;
+  
+  if (tabCount > commaCount) {
     return parseInventoryTSV(text);
   }
-  // Fallback: try TSV anyway (some CSV exports use tabs)
-  return parseInventoryTSV(text);
+  
+  // CSV format: use parseCSVRaw
+  const rows = parseCSVRaw(text);
+  const records: InventoryRecord[] = [];
+
+  // Find header row containing "Items" and "UOM"
+  let dataStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some(c => c.trim() === "Items") && rows[i].some(c => c.trim() === "UOM")) {
+      dataStart = i + 1;
+      break;
+    }
+  }
+  if (dataStart < 0) dataStart = 4; // fallback
+
+  for (let i = dataStart; i < rows.length; i++) {
+    const cols = rows[i];
+    const itemName = (cols[5] ?? "").trim();
+    if (!itemName) continue;
+    // Skip summary rows
+    if (/^\d[\d.,\s()-]*$/.test(itemName)) continue;
+
+    const category = (cols[2] ?? "").trim();
+    const unit = (cols[6] ?? "").trim();
+    const openingQty = parseAccountingNumber(cols[7] ?? "0");
+    const purchases = parseAccountingNumber(cols[8] ?? "0");
+    const sales = parseAccountingNumber(cols[9] ?? "0");
+    const systemQty = parseAccountingNumber(cols[10] ?? "0");
+    const physicalQty = parseAccountingNumber(cols[11] ?? "0");
+    const diff = parseAccountingNumber(cols[12] ?? "0");
+    const cog = parseAccountingNumber(cols[13] ?? "0");
+    const consumption = parseAccountingNumber(cols[14] ?? "0");
+    const lostValue = parseAccountingNumber(cols[15] ?? "0");
+    const totalCog = parseAccountingNumber(cols[16] ?? "0");
+    const purchaseCost = parseAccountingNumber(cols[17] ?? "0");
+    const remark = (cols[18] ?? "").trim();
+    const action = (cols[19] ?? "").trim();
+
+    records.push({
+      item_name: itemName,
+      category: category || "Uncategorized",
+      unit,
+      opening_qty: openingQty,
+      purchases,
+      sales,
+      system_qty: systemQty,
+      physical_qty: physicalQty,
+      diff,
+      cog,
+      consumption,
+      lost_value: lostValue,
+      total_cog: totalCog,
+      purchase_cost: purchaseCost,
+      remark,
+      action,
+    });
+  }
+
+  return records;
 }

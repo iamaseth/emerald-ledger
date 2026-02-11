@@ -1,185 +1,185 @@
-					Stock Count Date : 1 JAN 2026		Counted by Seven													
-																				
-							Balance at at 30 Nov 2025			 Balane as at 31 DEC 25 	 Physical stock count on 31 DEC 25 									
-					Items	UOM	QTY	Purchase	Sale	 QTY 	 QTY per Physical 	 Diff 	 COG 	 Consumption 	 Lost 	 Total COG 	 Purchase 	 Remark 	 Action Required 	
-		Draft & Bottles		ABC	ABC	Bottle	  69.00 	0	39	  30 	  25 	  (5.00)	  52.00 		  (6.67)	  (58.67)	  -   			
-		Vodka		Absolut Blue	Absolut Blue	Bottle	  2.00 	10		  12 	  6 	  (6.00)	  -   	  (66.90)		  (66.90)	  111.50 	Use For blending 		
-		Rum		Amaretto	Ameretto	Bottle	  4.00 	1		  5 	  4 	  (1.00)	  -   	  (7.00)		  (7.00)	  7.00 	Use For blending 		
-		Draft & Bottles		Anchor Bottle	Anchor Bottle	Bottle	  54.00 	0	2	  52 	  -   	  (52.00)	  1.33 		  (34.45)	  (35.78)	  -   	Lost or Sale at Event		
-		Draft & Bottles		Angkor Bottle	Angkor Bottle	Bottle	  92.00 	192	188	  96 	  66 	  (30.00)	  104.87 		  (16.73)	  (121.60)	  107.10 			
-		Bottles		Angkor Sky	Angkor Sky	Bottle	  7.00 	0	0	  7 	  -   	  (7.00)	  -   		  (3.97)	  (3.97)	  -   			
-		#N/A		Angostura	Angostura	Bottle	  -   	2		  2 	  -   	  (2.00)	  -   	  (26.00)		  (26.00)	  26.00 			
-		#N/A		Aperol	Aperol	Bottle	  3.00 	2		  5 	  4 	  (1.00)	  -   	  (13.00)		  (13.00)	  26.00 	Use For blending 		
-		Soft Drinks		Apple juice	Apple juice	Bottle	  16.00 	12		  28 	  18 	  (10.00)	  -   	  (16.67)		  (16.67)	  20.00 	Over stock		
-		Rum		Bacardi  Cataoro gool	Bacardi  Cataoro gool	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-x		Rum		Bacardi Black	Bacardi Black	Bottle	  6.00 	1		  7 	  5 	  (2.00)	  -   	  (28.00)		  (28.00)	  14.00 			
-		Rum		Bacardi Light	Bacardi Light	Bottle	  -   	11		  11 	  -   	  (11.00)	  -   	  (111.50)		  (111.50)	  111.50 	Use For blending 		
-		Rum		Bacardi White  Rum	Bacardi White	Bottle	  3.00 	0		  3 	  5 	  2.00 	  -   	  23.80 		  23.80 	  -   	Use For blending 		
-x		Liqueurs		Baileys	Baileys	Bottle	  2.00 	4		  6 	  4 	  (2.00)	  -   	  (29.00)		  (29.00)	  58.00 			
-		Whiskey		Ballantines	Ballantines	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-				Barton GIN	Barton GIN	Bottle	  -   	2		  2 	  -   	  (2.00)	  -   	  (30.00)		  (30.00)	  30.00 			
-				Barton Vodka	Barton Vodka	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-				Barton Light Rum	Barton Light Rum	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Bardinet - Blue Curacao	Bardinet - Blue Curacao	Bottle	  5.00 	0		  5 	  4 	  (1.00)	  -   	  (6.50)		  (6.50)	  -   			
-		#N/A		Bardinet - Cherry Brandy liquor	Bardinet - Cherry Brandy liquor	Bottle	  1.00 	1		  2 	  1 	  (1.00)	  -   	  (6.50)		  (6.50)	  6.50 	Use For blending 		
-		#N/A		Bardinet - Coconut Cream	Bardinet - Coconut Cream	Bottle	  2.00 	3		  5 	  3 	  (2.00)	  -   	  (13.67)		  (13.67)	  20.50 	Use For blending 		
-x		#N/A		Bardinet - Cream Peche	Bardinet - Cream Peche	Bottle	  1.00 	1		  2 	  2 	  -   	  -   	  -   		  -   	  6.50 	Use For blending 		
-x		#N/A		Bardinet - Grenadine	Bardinet - Grenadine	Bottle	  3.00 	0		  3 	  2 	  (1.00)	  -   	  (5.50)		  (5.50)	  -   	Use For blending 		
-New		#N/A		Bardinet - Sour Apple	Bardinet - Sour Apple	Bottle	  4.00 	0		  4 	  4 	  -   	  -   	  -   		  -   	  -   			
-x		#N/A		Bardinet - Triple sec	Bardinet - Triple sec	Bottle	  8.00 	12		  20 	  4 	  (16.00)	  -   	  (104.00)		  (104.00)	  78.00 	Use For blending 		
-		#N/A		Beefeater Gin	Beefeater	Bottle	  9.00 	4		  13 	  6 	  (7.00)	  -   	  (87.50)		  (87.50)	  50.00 	Use For blending 		
-		#N/A	Vodhka	Belvedere	Belvedere	Bottle	  3.00 	0		  3 	  2 	  (1.00)	  -   	  (31.90)		  (31.90)	  -   	Use For blending 		
-		#N/A		BLANC 1664	BLANC 1664	Bottle	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-		Gin		Bombay Gin	Bombay Gin	Bottle	  4.00 	7		  11 	  4 	  (7.00)	  -   	  (105.00)		  (105.00)	  105.00 	Use For blending 		
-		#N/A		Cacha Ca 51	Cacha Ca 51	Bottle	  4.00 	0		  4 	  2 	  (2.00)	  -   	  (21.00)		  (21.00)	  -   			
-		Beers		Cambodia Bottle	Cambodia Bottle	Bottle	  247.00 	576	202	  621 	  480 	  (141.00)	  108.72 		  (75.89)	  (184.60)	  -   			
-		Bottles		Cambodia Cans	Cambodia Cans	Cans	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-	Draft Beer	Draft & Bottles		Cambodia draft	Cambodia draft	Keg	  25.00 	115		  140 	  27 	  (113.00)	  -   	  (2,456.52)		  (2,456.52)	  2,500.00 	Consumption		
-		#N/A		Cambodia Irish Golding stout	Cambodia Irish Golding stout	Bottle	  -   	0	0	  -   	  -   	  -   	  -   			  -   	  -   			write off
-		#N/A		Cambodia Munchen	Cambodia Munchen	Bottle	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   	To create Items code 		write off
-		#N/A		Cambodia Wheat Beer	Cambodia Wheat Beer	Bottle	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			write off
-				Cambodia drinking water	Cambodia drinking water		 Not count  	0	0	#VALUE!	  -   	  -   	  -   			  -   	  -   			
-				Cambodia CoCa	Cambodia CoCa		  -   	0		  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-		Aperitifs		Campari	Campari	Bottle	  1.00 	1		  2 	  1 	  (1.00)	  -   	  (12.00)		  (12.00)	  12.00 	Use For blending 		
-		Rum		CaptainMorganDark	Captain Morgan Black	Bottle	  4.00 	0		  4 	  4 	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-		Rum		CaptainMorganSpiced-Gold	Captain Morgan Spiced	Bottle	  9.00 	0		  9 	  7 	  (2.00)	  -   	  (23.00)		  (23.00)	  -   	Use For blending 		
-		Draft & Bottles		Carlsberg Bottle	Carlsberg Bottle	Bottle	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			write off
-		#N/A		Chivas 12	Chivas 12	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Cinzano Roso	Cinzano Roso	Bottle	  1.00 	0		  1 	  -   	  (1.00)	  -   	  (9.90)		  (9.90)	  -   	Use For blending 		
-		Soft Drinks		Coca Cola	Coca Cola	Bottle	  81.00 	360	245	  196 	  48 	  (148.00)	  89.02 	  (53.77)		  (142.79)	  130.80 	use For blending 		
-		Soft Drinks		Coca Cola light	Coca Cola light	Bottle	  48.00 	48	22	  74 	  82 	  8.00 	  8.25 	  3.00 		  (5.25)	  18.00 	use For blending 		
-		Soft Drinks		Coca Zero	Coca Zero	Bottle	  31.00 	96	59	  68 	  56 	  (12.00)	  20.90 	  (4.25)		  (25.15)	  34.00 	use For blending 		
-		Craft Beers		Coconut Cream ale	Coconut Cream ale	Bottle	  17.00 	12	17	  12 	  12 	  -   	  22.61 		  -   	  (22.61)	  15.96 			
-New		#N/A		Condelemark - White	Condelemark - White	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	purchase at event day		
-		Draft & Bottles		Corona	Corona	Bottle	  120.00 	120	94	  146 	  122 	  (24.00)	  103.40 		  (26.40)	  (129.80)	  132.00 	wrong keyin items for sale and lost		
-				Chang			  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-		Soft Drinks		Cranberry juice	Cranberry juice	Bottle	  8.00 	24		  32 	  22 	  (10.00)	  -   	  (18.33)		  (18.33)	  44.00 	Use For blending 		
-		#N/A		D.O.M	D.O.M	Bottle	  1.00 	1		  2 	  2 	  -   	  -   	  -   		  -   	  23.00 	Use For blending 		
-				Express			  -   	0	0	  -   	  -   	  -   	  -   			  -   	  -   			
-		Shooters		Fireball	Fireball	Bottle	  3.00 	2		  5 	  2 	  (3.00)	  -   	  (52.50)		  (52.50)	  35.00 			
-		Liqueurs		Frangelico	Frangelico	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		Craft Beers		Gancore IPA	Gancore IPA	Bottle	  27.00 	12	19	  20 	  22 	  2.00 	  30.02 		  3.16 	  (26.86)	  18.96 			
-		#N/A		Giffard	Giffard	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-New		#N/A		GIN Mabooze	GIN Mabooze		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Soft Drinks		Ginger Ale	Ginger Ale	Bottle	  54.00 	72	48	  78 	  70 	  (8.00)	  17.00 	  (2.83)		  (19.83)	  25.50 	Use For blending 		
-		Whiskey		Glenfiddich - 12	Glenfiddich	Bottle	  2.00 	1		  3 	  2 	  (1.00)	  -   	  (38.00)		  (38.00)	  38.00 			
-		Whiskey		Glenfiddich - 15	Glenfiddich	Bottle	  3.00 	0		  3 	  3 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Grand Marnier	Grand Marnier	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-		Vodka		Grey goose Vodka	Grey Goose	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Guinness	Guinness	Bottle	  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-		Draft & Bottles		Hanuman Bottle	Hanuman Bottle	Bottle	  51.00 	120	125	  46 	  52 	  6.00 	  67.71 		  3.25 	  (64.46)	  65.00 			
-				Hanuman Black Bottle	Hanuman Black Bottle		  58.00 	72	26	  104 	  104 	  -   	  17.33 		  -   	  (17.33)	  48.00 			
-		Rum		Havana Club	Havana Club 3 Anejo	Bottle	  4.00 	0		  4 	  4 	  -   	  -   	  -   		  -   	  -   			
-		Draft & Bottles		Heineken	Heineken	Bottle	  66.00 	96	105	  57 	  58 	  1.00 	  91.88 		  0.88 	  (91.00)	  84.00 	wrong keyin items for sale and lost		
-		Gin		Hendrick's gin	Hendricks	Bottle	  4.00 	0		  4 	  2 	  (2.00)	  -   	  (56.00)		  (56.00)	  -   	Use For blending 		
-		#N/A		Hennessy	Hennessy	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		Draft & Bottles		Hoegaarden Rose	Hoegaarden Rose	Bottle	  32.00 	0	19	  13 	  5 	  (8.00)	  25.46 		  (10.72)	  (36.18)	  -   	Lost or Sale at Event		
-		Draft & Bottles		Hoegaarden Wheat	Hoegaarden Wheat	Bottle	  62.00 	0	18	  44 	  40 	  (4.00)	  22.30 		  (4.96)	  (27.26)	  -   			
-New		#N/A		IZE	IZE	Cans	  -   	0	0	  -   	  -   	  -   	  -   			  -   	  -   	Free of charged from Cambodia Beer	Item code and price set up 	
-		Whiskey		Jack Daniels	Jack Daniels	Bottle	  7.00 	8		  15 	  4 	  (11.00)	  -   	  (206.25)		  (206.25)	  150.00 	Use For blending 		
-		Shooters		Jagermeifter	Jagermeister	Bottle	  7.00 	12		  19 	  2 	  (17.00)	  -   	  (199.75)		  (199.75)	  141.00 	Use For blending 		
-		Bottles		Jameson	Jameson Bottle	Bottle	  8.00 	0		  8 	  4 	  (4.00)	  -   	  (60.00)		  (60.00)	  -   	Use For blending 		
-		Whiskey		Jim Beam White	Jim Beam White	Bottle	  7.00 	0		  7 	  5 	  (2.00)	  -   	  (22.00)		  (22.00)	  -   	Use For blending 		
-				Jinro	Jinro	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Whiskey		Johnnie Walker Black Label	Johnnie Walker Black Label	Bottle	  3.00 	2		  5 	  2 	  (3.00)	  -   	  (90.00)		  (90.00)	  60.00 			
-		Liqueurs		Kahlua	Kahlua	Bottle	  3.00 	2		  5 	  4 	  (1.00)	  -   	  (12.00)		  (12.00)	  24.00 			
-		Vodka		Ketel One	Ketel One	Bottle	  4.00 	0		  4 	  4 	  -   	  -   	  -   		  -   	  -   			
-Water		Soft Drinks		Kulen 500ml	Kulen 500ml	Bottle	  71.00 	600	523	  148 	  137 	  (11.00)	  152.54 	  (3.21)		  (155.75)	  175.00 	Use For blending, used 557 Bottle but it is free of charged from Cambodia beer		
-		Craft Beers		Lemongrass Kolsch	Lemongrass Kolsch	Bottle	  17.00 	0	9	  8 	  6 	  (2.00)	  11.97 		  (2.66)	  (14.63)	  -   			
-		#N/A		Lychees Cans	Lychees Cans	Bottle	  11.00 	12		  23 	  12 	  (11.00)	  -   	  (27.50)		  (27.50)	  30.00 	Use For blending 		
-		Whiskey		Makers Mark	Makers Mark	Bottle	  2.00 	1		  3 	  2 	  (1.00)	  -   	  (24.50)		  (24.50)	  24.50 	Use For blending 		
-		Liqueurs		Malibu	Malibu	Bottle	  4.00 	4		  8 	  7 	  (1.00)	  -   	  (11.50)		  (11.50)	  46.00 			
-		Soft Drinks		Mango juice	Mango juice	Bottle	  2.00 	24		  26 	  4 	  (22.00)	  -   	  (4.03)		  (4.03)	  4.40 	Consumption 		
-x		Aperitifs		Martini Bianco	Martini Bianco	Bottle	  1.00 	1		  2 	  1 	  (1.00)	  -   	  (11.00)		  (11.00)	  11.00 	Use For blending 		
-		Aperitifs		Martini Extra Dry	Martini Extra Dry	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Martini Rosso	Martini Rosso	Bottle	  1.00 	1		  2 	  1 	  (1.00)	  -   	  (11.00)		  (11.00)	  11.00 			
-		#N/A		Merlot Cabernet	Merlot Cabernet	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-		#N/A		Midori	Midori	Bottle	  2.00 	0		  2 	  3 	  1.00 	  -   	  14.50 		  14.50 	  -   			
-		#N/A		Ming Vodka	Ming Vodka	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-		#N/A		Monin Coconut	Monin Coconut	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Monin Mango	Monin Mango	Bottle	  3.00 	0		  3 	  3 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Monin Passion	Monin Passion	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-				Monin Guava	Monin Guava	Bottle	  1.00 	0	0	  1 	  1 	  -   	  -   		  -   	  -   	  -   			
-				Monin Vanila	Monin Vanila	Bottle	  1.00 	0	0	  1 	  1 	  -   	  -   		  -   	  -   	  -   			
-				Monin Grenadine	Monin Grenadine	Bottle	  -   	0		  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-		#N/A		Orange Curacao	Orange Curacao	Bottle	  4.00 	2		  6 	  5 	  (1.00)	  -   	  (8.50)		  (8.50)	  17.00 	Use For blending 		
-	Juice	Soft Drinks		Orange juice	Orange juice	Bottle	  13.00 	0		  13 	  6 	  (7.00)	  -   	  (11.67)		  (11.67)	  -   	Use For blending 		
-		#N/A		PASTIS	PASTIS	Bottle	  1.00 	1		  2 	  2 	  -   	  -   	  -   		  -   	  5.00 			
-				Partron silver 70cl	Partron silver 70cl		  1.00 	0	0	  1 	  1 	  -   	  -   		  -   	  -   	  -   			
-				Pocari sweat bottle	Pocari sweat bottle		  24.00 	0	0	  24 	  23 	  (1.00)	  -   		  (0.75)	  (0.75)	  -   			
-		Aperitifs		Pimm's	Pimms	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-	Juice	Soft Drinks		Pineapple juice	Pineapple juice	Bottle	  14.00 	12		  26 	  19 	  (7.00)	  -   	  (11.67)		  (11.67)	  20.00 	Use For blending 		
-		#N/A		Plantation Dark Rum	Plantation Dark Rum	Bottle	  2.00 	0		  2 	  2 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Prince Brewing - Coconager	Prince Brewing - Coconager	Bottle	  -   	0	0	  -   	  -   	  -   	  -   			  -   	  -   			
-		#N/A		ProSecco Rose 	Prosecco Rose Bottle	Bottle	  11.00 	0		  11 	  11 	  -   	  -   	  -   		  -   	  -   	Over stock, but it might be wrong key in with white		
-		#N/A		ProSecco White - Spumante Prosecco DOC Treviso "Butterfly" 	Prosecco White Bottle	Bottle	  20.00 	0		  20 	  13 	  (7.00)	  -   	  -   		  -   	  -   	Use For blending 		
-		#N/A		Red Wine	Red Wine		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Soft Drinks		Redbull	Redbull	Bottle	  78.00 	96	30	  144 	  47 	  (97.00)	  13.75 	  (44.46)		  (58.21)	  44.00 	Use For blending 		
-		Craft Beers		Redbus	Redbus	Bottle	  17.00 	12	4	  25 	  19 	  (6.00)	  5.84 		  (8.76)	  (14.60)	  17.52 			
-		Aperitifs		RICARD	Richard	Bottle	  1.00 	1		  2 	  2 	  -   	  -   	  -   		  -   	  12.00 			
-		Gin		Roku Gin	Roku Japanese	Bottle	  4.00 	0		  4 	  3 	  (1.00)	  -   	  (17.50)		  (17.50)	  -   	Use For blending 		
-New		#N/A		RUM Mabooze	RUM Mabooze		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Shooters		SAMBUCA	SAMBUCA	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Seekers Gold Gin	Seekers Gold Gin	Bottle	  1.00 	0		  1 	  2 	  1.00 	  -   	  162.86 		  162.86 	  -   			
-		Gin		Seekers Jason Kong	Seekers Jason Kong	Bottle	  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		Gin		Seekers Mekong Dry	Seekers Mekong Dry	Bottle	  1.00 	0		  1 	  2 	  1.00 	  -   	  149.10 		  149.10 	  -   			
-		#N/A		Seekers Mekong Orange	Seekers Mekong Orange	Bottle	  1.00 	0		  1 	  2 	  1.00 	  -   	  71.45 		  71.45 	  -   			
-		#N/A		Seekers Mekong Vodka	Seekers Mekong Vodka	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Craft Beers		Seven Days	Seven Days	Bottle	  25.00 	0	3	  22 	  22 	  -   	  3.99 		  -   	  (3.99)	  -   			
-		Draft & Bottles		Singha Bottle	Singha Bottle	Bottle	  35.00 	0	17	  18 	  15 	  (3.00)	  13.10 		  (2.31)	  (15.42)	  -   			
-		Craft Beers		Smiling Evil	Smiling Evil	Bottle	  26.00 	0	14	  12 	  12 	  -   	  574.00 		  -   	  (574.00)	  -   			
-		#N/A		Smirnoff - cranberry	Smirnoff - cranberry		  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		#N/A		Smirnoff - rassberry vodhka	Smirnoff - rassberry vodhka		  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-		Soft Drinks		Soda water	Soda water	Bottle	  148.00 	120	86	  182 	  54 	  (128.00)	  30.46 	  (45.33)		  (75.79)	  42.50 	Use For blending 		
-		#N/A		Sol de Chile - Red - Carbernet	Sol de Chile - Red - Carbernet	Bottle	  8.00 	12		  20 	  16 	  (4.00)	  -   	  (20.00)		  (20.00)	  60.00 	Use For blending 		
-		#N/A		Sol de Chile - white - Blanc	Sol de Chile - white - Blanc	Bottle	  5.00 	0		  5 	  5 	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-		Draft & Bottles		Somersby	Somersby	Bottle	  75.00 	72	89	  58 	  52 	  (6.00)	  90.11 		  (6.08)	  (96.19)	  72.90 	wrong keyin items for sale and lost		
-		Soft Drinks		Sprite	Sprite	Bottle	  57.00 	120	55	  122 	  79 	  (43.00)	  16.73 	  (13.08)		  (29.81)	  36.50 	Use For blending 		
-x		Vodka		Vodka Stolichnaya 75cl - 1L	Stolichnaya	Bottle	  10.00 	7		  17 	  6 	  (11.00)	  -   	  (104.50)		  (104.50)	  66.50 	Use For blending 		
-				Straw Black Big	Straw Black Big	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Vodka		T&T Vodka	T&T (Treid&True)		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		Tequila		Tequila gold  (expensive)	Jose Cuervo Gold	Bottle	  12.00 	0		  12 	  6 	  (6.00)	  -   	  (69.00)		  (69.00)	  -   	Use For blending 		
-x		Tequila		Tequila gold (cheap) 	Jose Cuervo Gold	Bottle	  12.00 	12		  24 	  9 	  (15.00)	  -   	  (142.50)		  (142.50)	  114.00 	Use For blending 		
-		Tequila		Tequila silver (expensive)	Jose Cuervo Silver	Bottle	  5.00 	0		  5 	  4 	  (1.00)	  -   	  (12.92)		  (12.92)	  -   	Use For blending 		
-		Tequila		Tequila silver patron	Jose Cuervo Silver	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-		#N/A		The dark side	The dark side	Bottle	  13.00 	0	7	  6 	  7 	  1.00 	  9.31 		  1.33 	  (7.98)	  -   			
-		Draft & Bottles		Tiger Bottle	Tiger Bottle	Bottle	  62.00 	72	62	  72 	  73 	  1.00 	  41.33 		  0.67 	  (40.67)	  48.00 	wrong keyin items for sale and lost/sale at event		
-		Draft & Bottles		Tiger Crystal Bottle	Tiger Crystal Bottle	Bottle	  -   	144	84	  60 	  61 	  1.00 	  59.50 		  0.71 	  (58.79)	  102.00 	wrong keyin items for sale and lost/sale at event		
-		Soft Drinks		Tonic water	Tonic water	Cans	  155.00 	72	7	  220 	  99 	  (121.00)	  2.48 	  (42.85)		  (45.33)	  25.50 	Use For blending 		
-		Craft Beers		Tuktuk	Tuktuk	Bottle	  15.00 	12	8	  19 	  20 	  1.00 	  10.64 		  1.33 	  (9.31)	  15.96 			
-		Wines		Vina maipo red	VINA maipo Red	Bottle	  10.00 	24		  34 	  17 	  (17.00)	  -   	  (113.33)		  (113.33)	  160.00 	Use For blending 		
-		Wines		Vina maipo white	VINA maipo White	Bottle	  11.00 	36		  47 	  16 	  (31.00)	  -   	  (206.67)		  (206.67)	  240.00 	for Selling per bottle and glasses		
-New		#N/A		Vodka Mabooze	Vodka Mabooze		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-		Vodka		Vodka Vanilla	Absolut Vanilla	Bottle	  3.00 	0		  3 	  2 	  (1.00)	  -   	  (12.90)		  (12.90)	  -   			
-				Vodka Sminoff	Vodka Sminoff		  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-				Vodka Loukatos		Bottle	  -   	0		  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-				Vattanac Premium	Vattanac Premium	Cans	  117.00 	0	26	  91 	  93 	  2.00 	  15.44 		  1.19 	  (14.25)	  -   			
-				Vattanac Light	Vattanac Premium Light	Cans	  65.00 	96	50	  111 	  112 	  1.00 	  30.47 		  0.61 	  (29.86)	  58.50 			
-		Gin		Widges	Widges	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   	Use For blending 		
-New		#N/A		Wishky Mabooze	Wishky Mabooze		  1.00 	0		  1 	  1 	  -   	  -   	  -   		  -   	  -   			
-New		#N/A		Wurkz	Wurkz	Cans	  -   	0	0	  -   	  -   	  -   	  -   			  -   	  -   			
-		#N/A		Zubrowska	Zubrowska	Bottle	  3.00 	0		  3 	  3 	  -   	  -   	  -   		  -   	  -   			
-				Tantehue White 75cl	Tantehue White 75cl	Bottle	  -   	0		  -   	  -   	  -   	  -   	  -   		  -   	  -   			
-													  1,864.44 	  (4,571.65)	  (187.22)	  (6,623.32)	  5,836.60 			
-																				
-Cigarettes		Cigarettes		Esse Change	Esse Change		  -   	10	8	  2 	  -   	  (2.00)	  8.00 		  (2.00)	  (10.00)	  10.00 	Opening balance		
-Cigarettes		Cigarettes		Esse Light	Esse Light		  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-				Esse Orange	Esse Orange		  13.00 	0	19	  (6)	  3 	  9.00 	  26.03 		  12.33 	  (13.70)	  -   			
-Cigarettes		Cigarettes		Marlboro Light	Marlboro Light		  14.00 	0	14	  -   	  29 	  29.00 	  19.18 		  39.73 	  20.55 	  -   			
-Cigarettes		Cigarettes		Marlboro Red	Marlboro Red		  18.00 	10	9	  19 	  14 	  (5.00)	  12.33 		  (6.85)	  (19.18)	  13.70 			
-				Marlboro Gold	Marlboro Gold		  -   	10	0	  10 	  -   	  (10.00)	  -   		  (13.70)	  (13.70)	  13.70 			
-				Marlboro White	Marlboro White		  -   	20	0	  20 	  -   	  (20.00)	  -   		  (27.40)	  (27.40)	  27.40 			
-Cigarettes		Cigarettes		MEVIUS midnight Chill	MEVIUS midnight Chill		  -   	0	3	  (3)	  -   	  3.00 	  4.90 		  4.90 	  -   	  -   	Opening balance		
-Cigarettes		Cigarettes		Mevius Original	Mevius Original		  10.00 	30	26	  14 	  11 	  (3.00)	  42.48 		  (4.90)	  (47.39)	  49.02 	Opening balance		
-		Cigarettes		Mevius Orange	Mevius Orange		  7.00 	0	1	  6 	  4 	  (2.00)	  1.63 		  (3.27)	  (4.90)	  -   	Opening balance		
-Cigarettes		Cigarettes		Mevius Sky Blue	Mevius Sky Blue		  17.00 	0	11	  6 	  3 	  (3.00)	  17.97 		  (4.90)	  (22.88)	  -   	Opening balance		
-Cigarettes		Cigarettes		Mevius Supper Slim Freezey Dew	Mevius Supper Slim Freezey Dew		  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-Cigarettes		#N/A		Winston Night Blue	Winston Night Blue		  -   	30	0	  30 	  7 	  (23.00)	  -   		  (16.33)	  (16.33)	  21.30 			
-Cigarettes		Cigarettes		MEVIUS Winston	MEVIUS Winston		  13.00 	0	30	  (17)	  -   	  17.00 	  49.02 		  27.78 	  (21.24)	  -   	Opening balance		
-Cigarettes		Cigarettes		MEVIUS Option Blue	MEVIUS Option Blue		  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-				Winston Option Purple	Winston Option Purple		  -   	10	1	  9 	  9 	  -   	  0.75 		  -   	  (0.75)	  7.50 			
-				Winston Light	Winston Light		  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-				Winston Super Slims	Winston Super Slims		  -   	0	0	  -   	  -   	  -   	  -   		  -   	  -   	  -   			
-				Winston Option Blue			  -   	0	0	  -   	  1 	  1.00 	  -   		  0.75 	  0.75 	  -   			
-								120		  120 	  -   	  (120.00)	  -   		  -   	  -   	  -   			
-													182.304	0	6.138	-176.166	142.62			
+,,,,,Stock Count Date : 1 JAN 2026,,Counted by Seven,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,Balance at at 30 Nov 2025,,, Balane as at 31 DEC 25 , Physical stock count on 31 DEC 25 ,,,,,,,,,
+,,,,,Items,UOM,QTY,Purchase,Sale, QTY , QTY per Physical , Diff , COG , Consumption , Lost , Total COG , Purchase , Remark , Action Required ,
+,,Draft & Bottles,,ABC,ABC,Bottle,  69.00 ,0,39,  30 ,  25 ,  (5.00),  52.00 ,,  (6.67),  (58.67),  -   ,,,
+,,Vodka,,Absolut Blue,Absolut Blue,Bottle,  2.00 ,10,,  12 ,  6 ,  (6.00),  -   ,  (66.90),,  (66.90),  111.50 ,Use For blending ,,
+,,Rum,,Amaretto,Ameretto,Bottle,  4.00 ,1,,  5 ,  4 ,  (1.00),  -   ,  (7.00),,  (7.00),  7.00 ,Use For blending ,,
+,,Draft & Bottles,,Anchor Bottle,Anchor Bottle,Bottle,  54.00 ,0,2,  52 ,  -   ,  (52.00),  1.33 ,,  (34.45),  (35.78),  -   ,Lost or Sale at Event,,
+,,Draft & Bottles,,Angkor Bottle,Angkor Bottle,Bottle,  92.00 ,192,188,  96 ,  66 ,  (30.00),  104.87 ,,  (16.73),  (121.60),  107.10 ,,,
+,,Bottles,,Angkor Sky,Angkor Sky,Bottle,  7.00 ,0,0,  7 ,  -   ,  (7.00),  -   ,,  (3.97),  (3.97),  -   ,,,
+,,#N/A,,Angostura,Angostura,Bottle,  -   ,2,,  2 ,  -   ,  (2.00),  -   ,  (26.00),,  (26.00),  26.00 ,,,
+,,#N/A,,Aperol,Aperol,Bottle,  3.00 ,2,,  5 ,  4 ,  (1.00),  -   ,  (13.00),,  (13.00),  26.00 ,Use For blending ,,
+,,Soft Drinks,,Apple juice,Apple juice,Bottle,  16.00 ,12,,  28 ,  18 ,  (10.00),  -   ,  (16.67),,  (16.67),  20.00 ,Over stock,,
+,,Rum,,Bacardi  Cataoro gool,Bacardi  Cataoro gool,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+x,,Rum,,Bacardi Black,Bacardi Black,Bottle,  6.00 ,1,,  7 ,  5 ,  (2.00),  -   ,  (28.00),,  (28.00),  14.00 ,,,
+,,Rum,,Bacardi Light,Bacardi Light,Bottle,  -   ,11,,  11 ,  -   ,  (11.00),  -   ,  (111.50),,  (111.50),  111.50 ,Use For blending ,,
+,,Rum,,Bacardi White  Rum,Bacardi White,Bottle,  3.00 ,0,,  3 ,  5 ,  2.00 ,  -   ,  23.80 ,,  23.80 ,  -   ,Use For blending ,,
+x,,Liqueurs,,Baileys,Baileys,Bottle,  2.00 ,4,,  6 ,  4 ,  (2.00),  -   ,  (29.00),,  (29.00),  58.00 ,,,
+,,Whiskey,,Ballantines,Ballantines,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,Barton GIN,Barton GIN,Bottle,  -   ,2,,  2 ,  -   ,  (2.00),  -   ,  (30.00),,  (30.00),  30.00 ,,,
+,,,,Barton Vodka,Barton Vodka,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,Barton Light Rum,Barton Light Rum,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Bardinet - Blue Curacao,Bardinet - Blue Curacao,Bottle,  5.00 ,0,,  5 ,  4 ,  (1.00),  -   ,  (6.50),,  (6.50),  -   ,,,
+,,#N/A,,Bardinet - Cherry Brandy liquor,Bardinet - Cherry Brandy liquor,Bottle,  1.00 ,1,,  2 ,  1 ,  (1.00),  -   ,  (6.50),,  (6.50),  6.50 ,Use For blending ,,
+,,#N/A,,Bardinet - Coconut Cream,Bardinet - Coconut Cream,Bottle,  2.00 ,3,,  5 ,  3 ,  (2.00),  -   ,  (13.67),,  (13.67),  20.50 ,Use For blending ,,
+x,,#N/A,,Bardinet - Cream Peche,Bardinet - Cream Peche,Bottle,  1.00 ,1,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  6.50 ,Use For blending ,,
+x,,#N/A,,Bardinet - Grenadine,Bardinet - Grenadine,Bottle,  3.00 ,0,,  3 ,  2 ,  (1.00),  -   ,  (5.50),,  (5.50),  -   ,Use For blending ,,
+New,,#N/A,,Bardinet - Sour Apple,Bardinet - Sour Apple,Bottle,  4.00 ,0,,  4 ,  4 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+x,,#N/A,,Bardinet - Triple sec,Bardinet - Triple sec,Bottle,  8.00 ,12,,  20 ,  4 ,  (16.00),  -   ,  (104.00),,  (104.00),  78.00 ,Use For blending ,,
+,,#N/A,,Beefeater Gin,Beefeater,Bottle,  9.00 ,4,,  13 ,  6 ,  (7.00),  -   ,  (87.50),,  (87.50),  50.00 ,Use For blending ,,
+,,#N/A,Vodhka,Belvedere,Belvedere,Bottle,  3.00 ,0,,  3 ,  2 ,  (1.00),  -   ,  (31.90),,  (31.90),  -   ,Use For blending ,,
+,,#N/A,,BLANC 1664,BLANC 1664,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,Gin,,Bombay Gin,Bombay Gin,Bottle,  4.00 ,7,,  11 ,  4 ,  (7.00),  -   ,  (105.00),,  (105.00),  105.00 ,Use For blending ,,
+,,#N/A,,Cacha Ca 51,Cacha Ca 51,Bottle,  4.00 ,0,,  4 ,  2 ,  (2.00),  -   ,  (21.00),,  (21.00),  -   ,,,
+,,Beers,,Cambodia Bottle,Cambodia Bottle,Bottle,  247.00 ,576,202,  621 ,  480 ,  (141.00),  108.72 ,,  (75.89),  (184.60),  -   ,,,
+,,Bottles,,Cambodia Cans,Cambodia Cans,Cans,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,Draft Beer,Draft & Bottles,,Cambodia draft,Cambodia draft,Keg,  25.00 ,115,,  140 ,  27 ,  (113.00),  -   ,"  (2,456.52)",,"  (2,456.52)","  2,500.00 ",Consumption,,
+,,#N/A,,Cambodia Irish Golding stout,Cambodia Irish Golding stout,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,,  -   ,  -   ,,,write off
+,,#N/A,,Cambodia Munchen,Cambodia Munchen,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,To create Items code ,,write off
+,,#N/A,,Cambodia Wheat Beer,Cambodia Wheat Beer,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,write off
+,,,,Cambodia drinking water,Cambodia drinking water,, Not count  ,0,0,#VALUE!,  -   ,  -   ,  -   ,,,  -   ,  -   ,,,
+,,,,Cambodia CoCa,Cambodia CoCa,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,Aperitifs,,Campari,Campari,Bottle,  1.00 ,1,,  2 ,  1 ,  (1.00),  -   ,  (12.00),,  (12.00),  12.00 ,Use For blending ,,
+,,Rum,,CaptainMorganDark,Captain Morgan Black,Bottle,  4.00 ,0,,  4 ,  4 ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,Rum,,CaptainMorganSpiced-Gold,Captain Morgan Spiced,Bottle,  9.00 ,0,,  9 ,  7 ,  (2.00),  -   ,  (23.00),,  (23.00),  -   ,Use For blending ,,
+,,Draft & Bottles,,Carlsberg Bottle,Carlsberg Bottle,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,write off
+,,#N/A,,Chivas 12,Chivas 12,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Cinzano Roso,Cinzano Roso,Bottle,  1.00 ,0,,  1 ,  -   ,  (1.00),  -   ,  (9.90),,  (9.90),  -   ,Use For blending ,,
+,,Soft Drinks,,Coca Cola,Coca Cola,Bottle,  81.00 ,360,245,  196 ,  48 ,  (148.00),  89.02 ,  (53.77),,  (142.79),  130.80 ,use For blending ,,
+,,Soft Drinks,,Coca Cola light,Coca Cola light,Bottle,  48.00 ,48,22,  74 ,  82 ,  8.00 ,  8.25 ,  3.00 ,,  (5.25),  18.00 ,use For blending ,,
+,,Soft Drinks,,Coca Zero,Coca Zero,Bottle,  31.00 ,96,59,  68 ,  56 ,  (12.00),  20.90 ,  (4.25),,  (25.15),  34.00 ,use For blending ,,
+,,Craft Beers,,Coconut Cream ale,Coconut Cream ale,Bottle,  17.00 ,12,17,  12 ,  12 ,  -   ,  22.61 ,,  -   ,  (22.61),  15.96 ,,,
+New,,#N/A,,Condelemark - White,Condelemark - White,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,purchase at event day,,
+,,Draft & Bottles,,Corona,Corona,Bottle,  120.00 ,120,94,  146 ,  122 ,  (24.00),  103.40 ,,  (26.40),  (129.80),  132.00 ,wrong keyin items for sale and lost,,
+,,,,Chang,,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,Soft Drinks,,Cranberry juice,Cranberry juice,Bottle,  8.00 ,24,,  32 ,  22 ,  (10.00),  -   ,  (18.33),,  (18.33),  44.00 ,Use For blending ,,
+,,#N/A,,D.O.M,D.O.M,Bottle,  1.00 ,1,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  23.00 ,Use For blending ,,
+,,,,Express,,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,,  -   ,  -   ,,,
+,,Shooters,,Fireball,Fireball,Bottle,  3.00 ,2,,  5 ,  2 ,  (3.00),  -   ,  (52.50),,  (52.50),  35.00 ,,,
+,,Liqueurs,,Frangelico,Frangelico,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Craft Beers,,Gancore IPA,Gancore IPA,Bottle,  27.00 ,12,19,  20 ,  22 ,  2.00 ,  30.02 ,,  3.16 ,  (26.86),  18.96 ,,,
+,,#N/A,,Giffard,Giffard,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+New,,#N/A,,GIN Mabooze,GIN Mabooze,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Soft Drinks,,Ginger Ale,Ginger Ale,Bottle,  54.00 ,72,48,  78 ,  70 ,  (8.00),  17.00 ,  (2.83),,  (19.83),  25.50 ,Use For blending ,,
+,,Whiskey,,Glenfiddich - 12,Glenfiddich,Bottle,  2.00 ,1,,  3 ,  2 ,  (1.00),  -   ,  (38.00),,  (38.00),  38.00 ,,,
+,,Whiskey,,Glenfiddich - 15,Glenfiddich,Bottle,  3.00 ,0,,  3 ,  3 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Grand Marnier,Grand Marnier,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Vodka,,Grey goose Vodka,Grey Goose,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Guinness,Guinness,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,Draft & Bottles,,Hanuman Bottle,Hanuman Bottle,Bottle,  51.00 ,120,125,  46 ,  52 ,  6.00 ,  67.71 ,,  3.25 ,  (64.46),  65.00 ,,,
+,,,,Hanuman Black Bottle,Hanuman Black Bottle,,  58.00 ,72,26,  104 ,  104 ,  -   ,  17.33 ,,  -   ,  (17.33),  48.00 ,,,
+,,Rum,,Havana Club,Havana Club 3 Anejo,Bottle,  4.00 ,0,,  4 ,  4 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Draft & Bottles,,Heineken,Heineken,Bottle,  66.00 ,96,105,  57 ,  58 ,  1.00 ,  91.88 ,,  0.88 ,  (91.00),  84.00 ,wrong keyin items for sale and lost,,
+,,Gin,,Hendrick's gin,Hendricks,Bottle,  4.00 ,0,,  4 ,  2 ,  (2.00),  -   ,  (56.00),,  (56.00),  -   ,Use For blending ,,
+,,#N/A,,Hennessy,Hennessy,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Draft & Bottles,,Hoegaarden Rose,Hoegaarden Rose,Bottle,  32.00 ,0,19,  13 ,  5 ,  (8.00),  25.46 ,,  (10.72),  (36.18),  -   ,Lost or Sale at Event,,
+,,Draft & Bottles,,Hoegaarden Wheat,Hoegaarden Wheat,Bottle,  62.00 ,0,18,  44 ,  40 ,  (4.00),  22.30 ,,  (4.96),  (27.26),  -   ,,,
+New,,#N/A,,IZE,IZE,Cans,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,,  -   ,  -   ,Free of charged from Cambodia Beer,Item code and price set up ,
+,,Whiskey,,Jack Daniels,Jack Daniels,Bottle,  7.00 ,8,,  15 ,  4 ,  (11.00),  -   ,  (206.25),,  (206.25),  150.00 ,Use For blending ,,
+,,Shooters,,Jagermeifter,Jagermeister,Bottle,  7.00 ,12,,  19 ,  2 ,  (17.00),  -   ,  (199.75),,  (199.75),  141.00 ,Use For blending ,,
+,,Bottles,,Jameson,Jameson Bottle,Bottle,  8.00 ,0,,  8 ,  4 ,  (4.00),  -   ,  (60.00),,  (60.00),  -   ,Use For blending ,,
+,,Whiskey,,Jim Beam White,Jim Beam White,Bottle,  7.00 ,0,,  7 ,  5 ,  (2.00),  -   ,  (22.00),,  (22.00),  -   ,Use For blending ,,
+,,,,Jinro,Jinro,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Whiskey,,Johnnie Walker Black Label,Johnnie Walker Black Label,Bottle,  3.00 ,2,,  5 ,  2 ,  (3.00),  -   ,  (90.00),,  (90.00),  60.00 ,,,
+,,Liqueurs,,Kahlua,Kahlua,Bottle,  3.00 ,2,,  5 ,  4 ,  (1.00),  -   ,  (12.00),,  (12.00),  24.00 ,,,
+,,Vodka,,Ketel One,Ketel One,Bottle,  4.00 ,0,,  4 ,  4 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+Water,,Soft Drinks,,Kulen 500ml,Kulen 500ml,Bottle,  71.00 ,600,523,  148 ,  137 ,  (11.00),  152.54 ,  (3.21),,  (155.75),  175.00 ,"Use For blending, used 557 Bottle but it is free of charged from Cambodia beer",,
+,,Craft Beers,,Lemongrass Kolsch,Lemongrass Kolsch,Bottle,  17.00 ,0,9,  8 ,  6 ,  (2.00),  11.97 ,,  (2.66),  (14.63),  -   ,,,
+,,#N/A,,Lychees Cans,Lychees Cans,Bottle,  11.00 ,12,,  23 ,  12 ,  (11.00),  -   ,  (27.50),,  (27.50),  30.00 ,Use For blending ,,
+,,Whiskey,,Makers Mark,Makers Mark,Bottle,  2.00 ,1,,  3 ,  2 ,  (1.00),  -   ,  (24.50),,  (24.50),  24.50 ,Use For blending ,,
+,,Liqueurs,,Malibu,Malibu,Bottle,  4.00 ,4,,  8 ,  7 ,  (1.00),  -   ,  (11.50),,  (11.50),  46.00 ,,,
+,,Soft Drinks,,Mango juice,Mango juice,Bottle,  2.00 ,24,,  26 ,  4 ,  (22.00),  -   ,  (4.03),,  (4.03),  4.40 ,Consumption ,,
+x,,Aperitifs,,Martini Bianco,Martini Bianco,Bottle,  1.00 ,1,,  2 ,  1 ,  (1.00),  -   ,  (11.00),,  (11.00),  11.00 ,Use For blending ,,
+,,Aperitifs,,Martini Extra Dry,Martini Extra Dry,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Martini Rosso,Martini Rosso,Bottle,  1.00 ,1,,  2 ,  1 ,  (1.00),  -   ,  (11.00),,  (11.00),  11.00 ,,,
+,,#N/A,,Merlot Cabernet,Merlot Cabernet,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,#N/A,,Midori,Midori,Bottle,  2.00 ,0,,  2 ,  3 ,  1.00 ,  -   ,  14.50 ,,  14.50 ,  -   ,,,
+,,#N/A,,Ming Vodka,Ming Vodka,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,#N/A,,Monin Coconut,Monin Coconut,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Monin Mango,Monin Mango,Bottle,  3.00 ,0,,  3 ,  3 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Monin Passion,Monin Passion,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,Monin Guava,Monin Guava,Bottle,  1.00 ,0,0,  1 ,  1 ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Monin Vanila,Monin Vanila,Bottle,  1.00 ,0,0,  1 ,  1 ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Monin Grenadine,Monin Grenadine,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,#N/A,,Orange Curacao,Orange Curacao,Bottle,  4.00 ,2,,  6 ,  5 ,  (1.00),  -   ,  (8.50),,  (8.50),  17.00 ,Use For blending ,,
+,Juice,Soft Drinks,,Orange juice,Orange juice,Bottle,  13.00 ,0,,  13 ,  6 ,  (7.00),  -   ,  (11.67),,  (11.67),  -   ,Use For blending ,,
+,,#N/A,,PASTIS,PASTIS,Bottle,  1.00 ,1,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  5.00 ,,,
+,,,,Partron silver 70cl,Partron silver 70cl,,  1.00 ,0,0,  1 ,  1 ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Pocari sweat bottle,Pocari sweat bottle,,  24.00 ,0,0,  24 ,  23 ,  (1.00),  -   ,,  (0.75),  (0.75),  -   ,,,
+,,Aperitifs,,Pimm's,Pimms,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,Juice,Soft Drinks,,Pineapple juice,Pineapple juice,Bottle,  14.00 ,12,,  26 ,  19 ,  (7.00),  -   ,  (11.67),,  (11.67),  20.00 ,Use For blending ,,
+,,#N/A,,Plantation Dark Rum,Plantation Dark Rum,Bottle,  2.00 ,0,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Prince Brewing - Coconager,Prince Brewing - Coconager,Bottle,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,,  -   ,  -   ,,,
+,,#N/A,,ProSecco Rose ,Prosecco Rose Bottle,Bottle,  11.00 ,0,,  11 ,  11 ,  -   ,  -   ,  -   ,,  -   ,  -   ,"Over stock, but it might be wrong key in with white",,
+,,#N/A,,"ProSecco White - Spumante Prosecco DOC Treviso ""Butterfly"" ",Prosecco White Bottle,Bottle,  20.00 ,0,,  20 ,  13 ,  (7.00),  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,#N/A,,Red Wine,Red Wine,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Soft Drinks,,Redbull,Redbull,Bottle,  78.00 ,96,30,  144 ,  47 ,  (97.00),  13.75 ,  (44.46),,  (58.21),  44.00 ,Use For blending ,,
+,,Craft Beers,,Redbus,Redbus,Bottle,  17.00 ,12,4,  25 ,  19 ,  (6.00),  5.84 ,,  (8.76),  (14.60),  17.52 ,,,
+,,Aperitifs,,RICARD,Richard,Bottle,  1.00 ,1,,  2 ,  2 ,  -   ,  -   ,  -   ,,  -   ,  12.00 ,,,
+,,Gin,,Roku Gin,Roku Japanese,Bottle,  4.00 ,0,,  4 ,  3 ,  (1.00),  -   ,  (17.50),,  (17.50),  -   ,Use For blending ,,
+New,,#N/A,,RUM Mabooze,RUM Mabooze,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Shooters,,SAMBUCA,SAMBUCA,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Seekers Gold Gin,Seekers Gold Gin,Bottle,  1.00 ,0,,  1 ,  2 ,  1.00 ,  -   ,  162.86 ,,  162.86 ,  -   ,,,
+,,Gin,,Seekers Jason Kong,Seekers Jason Kong,Bottle,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Gin,,Seekers Mekong Dry,Seekers Mekong Dry,Bottle,  1.00 ,0,,  1 ,  2 ,  1.00 ,  -   ,  149.10 ,,  149.10 ,  -   ,,,
+,,#N/A,,Seekers Mekong Orange,Seekers Mekong Orange,Bottle,  1.00 ,0,,  1 ,  2 ,  1.00 ,  -   ,  71.45 ,,  71.45 ,  -   ,,,
+,,#N/A,,Seekers Mekong Vodka,Seekers Mekong Vodka,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Craft Beers,,Seven Days,Seven Days,Bottle,  25.00 ,0,3,  22 ,  22 ,  -   ,  3.99 ,,  -   ,  (3.99),  -   ,,,
+,,Draft & Bottles,,Singha Bottle,Singha Bottle,Bottle,  35.00 ,0,17,  18 ,  15 ,  (3.00),  13.10 ,,  (2.31),  (15.42),  -   ,,,
+,,Craft Beers,,Smiling Evil,Smiling Evil,Bottle,  26.00 ,0,14,  12 ,  12 ,  -   ,  574.00 ,,  -   ,  (574.00),  -   ,,,
+,,#N/A,,Smirnoff - cranberry,Smirnoff - cranberry,,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,Smirnoff - rassberry vodhka,Smirnoff - rassberry vodhka,,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Soft Drinks,,Soda water,Soda water,Bottle,  148.00 ,120,86,  182 ,  54 ,  (128.00),  30.46 ,  (45.33),,  (75.79),  42.50 ,Use For blending ,,
+,,#N/A,,Sol de Chile - Red - Carbernet,Sol de Chile - Red - Carbernet,Bottle,  8.00 ,12,,  20 ,  16 ,  (4.00),  -   ,  (20.00),,  (20.00),  60.00 ,Use For blending ,,
+,,#N/A,,Sol de Chile - white - Blanc,Sol de Chile - white - Blanc,Bottle,  5.00 ,0,,  5 ,  5 ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,Draft & Bottles,,Somersby,Somersby,Bottle,  75.00 ,72,89,  58 ,  52 ,  (6.00),  90.11 ,,  (6.08),  (96.19),  72.90 ,wrong keyin items for sale and lost,,
+,,Soft Drinks,,Sprite,Sprite,Bottle,  57.00 ,120,55,  122 ,  79 ,  (43.00),  16.73 ,  (13.08),,  (29.81),  36.50 ,Use For blending ,,
+x,,Vodka,,Vodka Stolichnaya 75cl - 1L,Stolichnaya,Bottle,  10.00 ,7,,  17 ,  6 ,  (11.00),  -   ,  (104.50),,  (104.50),  66.50 ,Use For blending ,,
+,,,,Straw Black Big,Straw Black Big,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Vodka,,T&T Vodka,T&T (Treid&True),,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,Tequila,,Tequila gold  (expensive),Jose Cuervo Gold,Bottle,  12.00 ,0,,  12 ,  6 ,  (6.00),  -   ,  (69.00),,  (69.00),  -   ,Use For blending ,,
+x,,Tequila,,Tequila gold (cheap) ,Jose Cuervo Gold,Bottle,  12.00 ,12,,  24 ,  9 ,  (15.00),  -   ,  (142.50),,  (142.50),  114.00 ,Use For blending ,,
+,,Tequila,,Tequila silver (expensive),Jose Cuervo Silver,Bottle,  5.00 ,0,,  5 ,  4 ,  (1.00),  -   ,  (12.92),,  (12.92),  -   ,Use For blending ,,
+,,Tequila,,Tequila silver patron,Jose Cuervo Silver,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,#N/A,,The dark side,The dark side,Bottle,  13.00 ,0,7,  6 ,  7 ,  1.00 ,  9.31 ,,  1.33 ,  (7.98),  -   ,,,
+,,Draft & Bottles,,Tiger Bottle,Tiger Bottle,Bottle,  62.00 ,72,62,  72 ,  73 ,  1.00 ,  41.33 ,,  0.67 ,  (40.67),  48.00 ,wrong keyin items for sale and lost/sale at event,,
+,,Draft & Bottles,,Tiger Crystal Bottle,Tiger Crystal Bottle,Bottle,  -   ,144,84,  60 ,  61 ,  1.00 ,  59.50 ,,  0.71 ,  (58.79),  102.00 ,wrong keyin items for sale and lost/sale at event,,
+,,Soft Drinks,,Tonic water,Tonic water,Cans,  155.00 ,72,7,  220 ,  99 ,  (121.00),  2.48 ,  (42.85),,  (45.33),  25.50 ,Use For blending ,,
+,,Craft Beers,,Tuktuk,Tuktuk,Bottle,  15.00 ,12,8,  19 ,  20 ,  1.00 ,  10.64 ,,  1.33 ,  (9.31),  15.96 ,,,
+,,Wines,,Vina maipo red,VINA maipo Red,Bottle,  10.00 ,24,,  34 ,  17 ,  (17.00),  -   ,  (113.33),,  (113.33),  160.00 ,Use For blending ,,
+,,Wines,,Vina maipo white,VINA maipo White,Bottle,  11.00 ,36,,  47 ,  16 ,  (31.00),  -   ,  (206.67),,  (206.67),  240.00 ,for Selling per bottle and glasses,,
+New,,#N/A,,Vodka Mabooze,Vodka Mabooze,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+,,Vodka,,Vodka Vanilla,Absolut Vanilla,Bottle,  3.00 ,0,,  3 ,  2 ,  (1.00),  -   ,  (12.90),,  (12.90),  -   ,,,
+,,,,Vodka Sminoff,Vodka Sminoff,,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,Vodka Loukatos,,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Vattanac Premium,Vattanac Premium,Cans,  117.00 ,0,26,  91 ,  93 ,  2.00 ,  15.44 ,,  1.19 ,  (14.25),  -   ,,,
+,,,,Vattanac Light,Vattanac Premium Light,Cans,  65.00 ,96,50,  111 ,  112 ,  1.00 ,  30.47 ,,  0.61 ,  (29.86),  58.50 ,,,
+,,Gin,,Widges,Widges,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,Use For blending ,,
+New,,#N/A,,Wishky Mabooze,Wishky Mabooze,,  1.00 ,0,,  1 ,  1 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+New,,#N/A,,Wurkz,Wurkz,Cans,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,,  -   ,  -   ,,,
+,,#N/A,,Zubrowska,Zubrowska,Bottle,  3.00 ,0,,  3 ,  3 ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,Tantehue White 75cl,Tantehue White 75cl,Bottle,  -   ,0,,  -   ,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,,,
+,,,,,,,,,,,,,"  1,864.44 ","  (4,571.65)",  (187.22),"  (6,623.32)","  5,836.60 ",,,
+,,,,,,,,,,,,,,,,,,,,
+Cigarettes,,Cigarettes,,Esse Change,Esse Change,,  -   ,10,8,  2 ,  -   ,  (2.00),  8.00 ,,  (2.00),  (10.00),  10.00 ,Opening balance,,
+Cigarettes,,Cigarettes,,Esse Light,Esse Light,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Esse Orange,Esse Orange,,  13.00 ,0,19,  (6),  3 ,  9.00 ,  26.03 ,,  12.33 ,  (13.70),  -   ,,,
+Cigarettes,,Cigarettes,,Marlboro Light,Marlboro Light,,  14.00 ,0,14,  -   ,  29 ,  29.00 ,  19.18 ,,  39.73 ,  20.55 ,  -   ,,,
+Cigarettes,,Cigarettes,,Marlboro Red,Marlboro Red,,  18.00 ,10,9,  19 ,  14 ,  (5.00),  12.33 ,,  (6.85),  (19.18),  13.70 ,,,
+,,,,Marlboro Gold,Marlboro Gold,,  -   ,10,0,  10 ,  -   ,  (10.00),  -   ,,  (13.70),  (13.70),  13.70 ,,,
+,,,,Marlboro White,Marlboro White,,  -   ,20,0,  20 ,  -   ,  (20.00),  -   ,,  (27.40),  (27.40),  27.40 ,,,
+Cigarettes,,Cigarettes,,MEVIUS midnight Chill,MEVIUS midnight Chill,,  -   ,0,3,  (3),  -   ,  3.00 ,  4.90 ,,  4.90 ,  -   ,  -   ,Opening balance,,
+Cigarettes,,Cigarettes,,Mevius Original,Mevius Original,,  10.00 ,30,26,  14 ,  11 ,  (3.00),  42.48 ,,  (4.90),  (47.39),  49.02 ,Opening balance,,
+,,Cigarettes,,Mevius Orange,Mevius Orange,,  7.00 ,0,1,  6 ,  4 ,  (2.00),  1.63 ,,  (3.27),  (4.90),  -   ,Opening balance,,
+Cigarettes,,Cigarettes,,Mevius Sky Blue,Mevius Sky Blue,,  17.00 ,0,11,  6 ,  3 ,  (3.00),  17.97 ,,  (4.90),  (22.88),  -   ,Opening balance,,
+Cigarettes,,Cigarettes,,Mevius Supper Slim Freezey Dew,Mevius Supper Slim Freezey Dew,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+Cigarettes,,#N/A,,Winston Night Blue,Winston Night Blue,,  -   ,30,0,  30 ,  7 ,  (23.00),  -   ,,  (16.33),  (16.33),  21.30 ,,,
+Cigarettes,,Cigarettes,,MEVIUS Winston,MEVIUS Winston,,  13.00 ,0,30,  (17),  -   ,  17.00 ,  49.02 ,,  27.78 ,  (21.24),  -   ,Opening balance,,
+Cigarettes,,Cigarettes,,MEVIUS Option Blue,MEVIUS Option Blue,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Winston Option Purple,Winston Option Purple,,  -   ,10,1,  9 ,  9 ,  -   ,  0.75 ,,  -   ,  (0.75),  7.50 ,,,
+,,,,Winston Light,Winston Light,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Winston Super Slims,Winston Super Slims,,  -   ,0,0,  -   ,  -   ,  -   ,  -   ,,  -   ,  -   ,  -   ,,,
+,,,,Winston Option Blue,,,  -   ,0,0,  -   ,  1 ,  1.00 ,  -   ,,  0.75 ,  0.75 ,  -   ,,,
+,,,,,,,,120,,  120 ,  -   ,  (120.00),  -   ,,  -   ,  -   ,  -   ,,,
+,,,,,,,,,,,,,182.304,0,6.138,-176.166,142.62,,,
