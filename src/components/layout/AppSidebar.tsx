@@ -12,6 +12,7 @@ import {
   BarChart3,
   Database,
   FileText,
+  ShieldCheck,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -29,6 +30,7 @@ const navItems = [
   { title: "Accounts Payable", url: "/accounts-payable", icon: FileText },
   { title: "Profit & Loss", url: "/profit-loss", icon: BarChart3 },
   { title: "Data Tools", url: "/data-tools", icon: Database },
+  { title: "Data Quality", url: "/data-quality", icon: ShieldCheck },
   { title: "Admin Settings", url: "/settings", icon: Settings },
 ];
 
