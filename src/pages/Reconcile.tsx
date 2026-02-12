@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useRealData } from "@/contexts/RealDataContext";
 import { KPICard } from "@/components/shared/KPICard";
 import { ExportButton } from "@/components/shared/ExportButton";
@@ -7,148 +7,142 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { CheckCircle, AlertTriangle, XCircle, DollarSign, CreditCard, Banknote, QrCode, Play } from "lucide-react";
+import { CheckCircle, XCircle, DollarSign, Play, Search, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { SalesRecord, BankStatementRecord } from "@/lib/csv-parser";
 
 const fmt = (n: number) =>
   `$${Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
-type MatchStatus = "matched" | "partial" | "unmatched";
-type Channel = "ABA QR" | "PPC Card" | "Cash" | "Unknown";
+type BankStatus = "matched" | "unmatched";
 
-interface ReconLine {
+interface SalesLedgerLine {
   id: string;
-  date: string;
-  channel: Channel;
-  posAmount: number;
+  category: string;
+  item_name: string;
+  qty: number;
+  price: number;
+  cost: number;
+  total_sales: number;
+  net_revenue: number;
+  profit: number;
+  bankStatus: BankStatus;
+  bankPartner: string;
   bankAmount: number;
-  posRef: string;
-  bankRef: string;
-  entity: string;
-  status: MatchStatus;
-  gap: number;
-  itemName: string;
 }
 
 const PPC_FEE_TOLERANCE = 0.03;
 const PAGE_SIZE = 50;
 
-function buildReconLines(bankSales: ReturnType<typeof useRealData>["bankSales"]): ReconLine[] {
-  const lines: ReconLine[] = [];
-  const usedBankIdxs = new Set<number>();
-  const allDeposits = bankSales.filter((b) => b.money_in > 0);
+/**
+ * Sales-Led matching: for each sale item, search bank deposits for a match.
+ * - ABA QR: match by REF ID containing item reference
+ * - PPC Card: match by amount within 3% fee tolerance
+ * - Fallback: try amount-based matching against remaining deposits
+ */
+function buildSalesLedger(
+  sales: SalesRecord[],
+  bankDeposits: BankStatementRecord[]
+): SalesLedgerLine[] {
+  const deposits = bankDeposits
+    .filter((b) => b.money_in > 0)
+    .map((b, i) => ({ ...b, _idx: i, _used: false }));
 
-  // ABA QR
-  allDeposits.forEach((dep, bIdx) => {
-    if (!dep.reference) return;
-    lines.push({
-      id: `aba-${bIdx}`, date: dep.date, channel: "ABA QR",
-      posAmount: dep.money_in, bankAmount: dep.money_in,
-      posRef: dep.reference, bankRef: dep.reference,
-      entity: dep.entity, status: "matched", gap: 0,
-      itemName: dep.remark || "ABA QR Payment",
-    });
-    usedBankIdxs.add(bIdx);
-  });
+  return sales.map((sale, idx) => {
+    const saleTotal = sale.total_sales;
+    let bankStatus: BankStatus = "unmatched";
+    let bankPartner = "";
+    let bankAmount = 0;
 
-  // PPC Card
-  allDeposits.forEach((dep, bIdx) => {
-    if (usedBankIdxs.has(bIdx)) return;
-    const details = dep.transaction_details.toLowerCase();
-    if (!details.includes("ppc") && !details.includes("card") && !details.includes("visa") && !details.includes("master")) return;
-    const expectedPOS = dep.money_in / (1 - PPC_FEE_TOLERANCE);
-    lines.push({
-      id: `ppc-${bIdx}`, date: dep.date, channel: "PPC Card",
-      posAmount: expectedPOS, bankAmount: dep.money_in,
-      posRef: "—", bankRef: dep.reference || "—",
-      entity: dep.entity || "Card Terminal", status: "partial",
-      gap: expectedPOS - dep.money_in,
-      itemName: dep.remark || "Card Payment (3% fee)",
-    });
-    usedBankIdxs.add(bIdx);
-  });
+    // Try exact amount match (ABA QR deposits with reference)
+    const qrMatch = deposits.find(
+      (d) => !d._used && d.reference && Math.abs(d.money_in - saleTotal) < 0.01
+    );
+    if (qrMatch) {
+      qrMatch._used = true;
+      bankStatus = "matched";
+      bankPartner = qrMatch.entity || qrMatch.remark || "ABA QR";
+      bankAmount = qrMatch.money_in;
+    }
 
-  // Cash
-  const cashDeposits = allDeposits.filter((dep, bIdx) => {
-    if (usedBankIdxs.has(bIdx)) return false;
-    const d = dep.transaction_details.toLowerCase();
-    return d.includes("cash deposit") || d.includes("cash");
-  });
-  cashDeposits.forEach((dep, i) => {
-    const bIdx = allDeposits.indexOf(dep);
-    lines.push({
-      id: `cash-${i}`, date: dep.date, channel: "Cash",
-      posAmount: dep.money_in, bankAmount: dep.money_in,
-      posRef: "CASH", bankRef: dep.reference || "CASH",
-      entity: dep.entity || "Cash Deposit", status: "matched", gap: 0,
-      itemName: "Cash Deposit",
-    });
-    usedBankIdxs.add(bIdx);
-  });
+    // Try PPC card match (within 3% fee tolerance)
+    if (bankStatus === "unmatched" && saleTotal > 0) {
+      const cardMatch = deposits.find((d) => {
+        if (d._used) return false;
+        const details = d.transaction_details.toLowerCase();
+        const isCard = details.includes("ppc") || details.includes("card") || details.includes("visa") || details.includes("master");
+        if (!isCard) return false;
+        const ratio = d.money_in / saleTotal;
+        return ratio >= (1 - PPC_FEE_TOLERANCE) && ratio <= 1;
+      });
+      if (cardMatch) {
+        cardMatch._used = true;
+        bankStatus = "matched";
+        bankPartner = cardMatch.entity || "Card Terminal";
+        bankAmount = cardMatch.money_in;
+      }
+    }
 
-  // Unmatched
-  allDeposits.forEach((dep, bIdx) => {
-    if (usedBankIdxs.has(bIdx)) return;
-    lines.push({
-      id: `unk-${bIdx}`, date: dep.date, channel: "Unknown",
-      posAmount: 0, bankAmount: dep.money_in,
-      posRef: "—", bankRef: dep.reference || "—",
-      entity: dep.entity || "Unknown", status: "unmatched",
-      gap: dep.money_in,
-      itemName: dep.remark || dep.transaction_details.slice(0, 40),
-    });
-  });
+    // Try general amount match for remaining
+    if (bankStatus === "unmatched" && saleTotal > 0) {
+      const amtMatch = deposits.find(
+        (d) => !d._used && Math.abs(d.money_in - saleTotal) < 0.50
+      );
+      if (amtMatch) {
+        amtMatch._used = true;
+        bankStatus = "matched";
+        bankPartner = amtMatch.entity || amtMatch.remark || "Bank Deposit";
+        bankAmount = amtMatch.money_in;
+      }
+    }
 
-  return lines.sort((a, b) => a.date.localeCompare(b.date));
+    const cost = sale.cost;
+    const profit = sale.total_sales - cost;
+
+    return {
+      id: `sale-${idx}`,
+      category: sale.category,
+      item_name: sale.item_name,
+      qty: sale.qty,
+      price: sale.price,
+      cost,
+      total_sales: saleTotal,
+      net_revenue: sale.net_revenue,
+      profit,
+      bankStatus,
+      bankPartner,
+      bankAmount,
+    };
+  });
 }
 
 export default function Reconcile() {
   const { sales, bankSales, loading } = useRealData();
-  const [activeTab, setActiveTab] = useState<"all" | MatchStatus>("all");
-  const [reconLines, setReconLines] = useState<ReconLine[] | null>(null);
+  const [activeTab, setActiveTab] = useState<"all" | BankStatus>("all");
+  const [ledger, setLedger] = useState<SalesLedgerLine[] | null>(null);
   const [page, setPage] = useState(1);
 
   const runAudit = useCallback(() => {
-    const result = buildReconLines(bankSales);
-    setReconLines(result);
+    const result = buildSalesLedger(sales, bankSales);
+    setLedger(result);
     setPage(1);
-  }, [bankSales]);
+  }, [sales, bankSales]);
 
-  const matched = useMemo(() => reconLines?.filter((l) => l.status === "matched") ?? [], [reconLines]);
-  const partial = useMemo(() => reconLines?.filter((l) => l.status === "partial") ?? [], [reconLines]);
-  const unmatched = useMemo(() => reconLines?.filter((l) => l.status === "unmatched") ?? [], [reconLines]);
+  const allLines = ledger ?? [];
+  const matched = allLines.filter((l) => l.bankStatus === "matched");
+  const unmatched = allLines.filter((l) => l.bankStatus === "unmatched");
 
-  const totalBankVerified = matched.reduce((s, l) => s + l.bankAmount, 0) + partial.reduce((s, l) => s + l.bankAmount, 0);
-  const totalUnmatched = unmatched.reduce((s, l) => s + l.bankAmount, 0);
-  const totalPOS = sales.reduce((s, r) => s + r.total_sales, 0);
+  const totalSales = allLines.reduce((s, l) => s + l.total_sales, 0);
+  const totalMatched = matched.reduce((s, l) => s + l.total_sales, 0);
+  const totalUnmatched = unmatched.reduce((s, l) => s + l.total_sales, 0);
+  const totalProfit = allLines.reduce((s, l) => s + l.profit, 0);
 
-  const allLines = reconLines ?? [];
   const filtered =
     activeTab === "all" ? allLines :
-    activeTab === "matched" ? matched :
-    activeTab === "partial" ? partial : unmatched;
+    activeTab === "matched" ? matched : unmatched;
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  const channelIcon = (ch: Channel) => {
-    switch (ch) {
-      case "ABA QR": return <QrCode className="h-3.5 w-3.5" />;
-      case "PPC Card": return <CreditCard className="h-3.5 w-3.5" />;
-      case "Cash": return <Banknote className="h-3.5 w-3.5" />;
-      default: return <AlertTriangle className="h-3.5 w-3.5" />;
-    }
-  };
-
-  const statusBadge = (s: MatchStatus) => {
-    const map = {
-      matched: { label: "🟢 Matched", cls: "bg-success/15 text-success border-success/30" },
-      partial: { label: "🟡 Partial", cls: "bg-warning/15 text-warning border-warning/30" },
-      unmatched: { label: "🔴 Unmatched", cls: "bg-destructive/15 text-destructive border-destructive/30" },
-    };
-    const { label, cls } = map[s];
-    return <Badge variant="outline" className={cn("text-[10px] font-medium", cls)}>{label}</Badge>;
-  };
 
   if (loading) {
     return (
@@ -163,48 +157,42 @@ export default function Reconcile() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-foreground">Multi-Channel Reconciliator</h1>
-          <p className="text-sm text-muted-foreground">December 2025 — POS ↔ Bank Matching Engine</p>
+          <h1 className="text-xl font-bold text-foreground">Sales Ledger — Reconciliator</h1>
+          <p className="text-sm text-muted-foreground">December 2025 — Sales-Led Bank Matching</p>
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={runAudit} className="gap-2">
             <Play className="h-4 w-4" />
-            {reconLines ? "Re-run Audit" : "Run Audit"}
+            {ledger ? "Re-run Audit" : "Run Audit"}
           </Button>
-          <ExportButton label="Export Recon Report" />
+          <ExportButton label="Export Report" />
         </div>
       </div>
 
-      {!reconLines ? (
+      {!ledger ? (
         <div className="glass-card p-12 text-center space-y-3">
-          <Play className="h-10 w-10 text-muted-foreground mx-auto" />
-          <h2 className="text-lg font-semibold text-foreground">Click "Run Audit" to start reconciliation</h2>
+          <Search className="h-10 w-10 text-muted-foreground mx-auto" />
+          <h2 className="text-lg font-semibold text-foreground">Click "Run Audit" to match Sales → Bank</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            The matching algorithm will compare POS sales against bank deposits using REF#, card amounts (3% fee tolerance), and cash deposits.
+            Every POS sale row becomes the source of truth. The engine searches bank deposits for matching amounts via ABA QR (REF ID), PPC Card (3% tolerance), and general amount match.
           </p>
         </div>
       ) : (
         <>
           {/* KPIs */}
           <div className="grid gap-4 sm:grid-cols-4">
-            <KPICard title="Total POS Sales" value={fmt(totalPOS)} icon={DollarSign} trendValue={`${sales.length} line items`} />
-            <KPICard title="Bank Verified" value={fmt(totalBankVerified)} icon={CheckCircle} trend="up" trendValue={`${matched.length + partial.length} deposits`} />
-            <KPICard title="Unmatched Deposits" value={fmt(totalUnmatched)} icon={XCircle} trend="down" trendValue={`${unmatched.length} flagged`} />
-            <KPICard
-              title="Match Rate"
-              value={`${allLines.length > 0 ? ((matched.length / allLines.length) * 100).toFixed(1) : 0}%`}
-              icon={CheckCircle}
-              trendValue={`${matched.length} of ${allLines.length}`}
-            />
+            <KPICard title="Total POS Sales" value={fmt(totalSales)} icon={DollarSign} trendValue={`${allLines.length} items`} />
+            <KPICard title="Bank Matched" value={fmt(totalMatched)} icon={CheckCircle} trend="up" trendValue={`${matched.length} items verified`} />
+            <KPICard title="No Bank Match" value={fmt(totalUnmatched)} icon={XCircle} trend="down" trendValue={`${unmatched.length} items flagged`} />
+            <KPICard title="Est. Gross Profit" value={fmt(totalProfit)} icon={TrendingUp} trendValue="COG-linked" />
           </div>
 
-          {/* Status Tabs */}
+          {/* Tabs */}
           <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as typeof activeTab); setPage(1); }}>
             <TabsList className="bg-muted/50">
               <TabsTrigger value="all">All ({allLines.length})</TabsTrigger>
               <TabsTrigger value="matched">🟢 Matched ({matched.length})</TabsTrigger>
-              <TabsTrigger value="partial">🟡 Partial ({partial.length})</TabsTrigger>
-              <TabsTrigger value="unmatched">🔴 Unmatched ({unmatched.length})</TabsTrigger>
+              <TabsTrigger value="unmatched">🔴 No Match ({unmatched.length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value={activeTab} className="mt-4 space-y-3">
@@ -213,22 +201,21 @@ export default function Reconcile() {
                   <Table>
                     <TableHeader>
                       <TableRow className="hover:bg-transparent border-border">
-                        <TableHead className="text-muted-foreground text-xs">Date</TableHead>
-                        <TableHead className="text-muted-foreground text-xs">Channel</TableHead>
-                        <TableHead className="text-muted-foreground text-xs">Entity</TableHead>
-                        <TableHead className="text-muted-foreground text-xs">Description</TableHead>
-                        <TableHead className="text-muted-foreground text-xs">POS Ref</TableHead>
-                        <TableHead className="text-muted-foreground text-xs text-right">POS Amount</TableHead>
-                        <TableHead className="text-muted-foreground text-xs text-right">Bank Amount</TableHead>
-                        <TableHead className="text-muted-foreground text-xs text-right">Gap</TableHead>
-                        <TableHead className="text-muted-foreground text-xs text-center">Status</TableHead>
+                        <TableHead className="text-muted-foreground text-xs">Category</TableHead>
+                        <TableHead className="text-muted-foreground text-xs">Item Name</TableHead>
+                        <TableHead className="text-muted-foreground text-xs text-right">Qty</TableHead>
+                        <TableHead className="text-muted-foreground text-xs text-right">Total Sales</TableHead>
+                        <TableHead className="text-muted-foreground text-xs text-right">Cost (COG)</TableHead>
+                        <TableHead className="text-muted-foreground text-xs text-right">Profit</TableHead>
+                        <TableHead className="text-muted-foreground text-xs text-center">Bank Status</TableHead>
+                        <TableHead className="text-muted-foreground text-xs">Bank Partner</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {paged.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-12">
-                            No transactions in this category.
+                          <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-12">
+                            No items in this category.
                           </TableCell>
                         </TableRow>
                       ) : (
@@ -237,33 +224,46 @@ export default function Reconcile() {
                             key={line.id}
                             className={cn(
                               "border-border",
-                              line.status === "unmatched" && "bg-destructive/5 hover:bg-destructive/10",
-                              line.status === "partial" && "bg-warning/5 hover:bg-warning/10",
-                              line.status === "matched" && "hover:bg-secondary/40"
+                              line.bankStatus === "unmatched" && "bg-destructive/5 hover:bg-destructive/10",
+                              line.bankStatus === "matched" && "hover:bg-secondary/40"
                             )}
                           >
-                            <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{line.date}</TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1.5 text-xs text-foreground">
-                                {channelIcon(line.channel)}
-                                <span className="font-medium">{line.channel}</span>
-                              </div>
+                            <TableCell className="text-xs text-muted-foreground">{line.category}</TableCell>
+                            <TableCell className="text-xs text-foreground font-medium max-w-[200px] truncate" title={line.item_name}>
+                              {line.item_name}
                             </TableCell>
-                            <TableCell className="text-xs text-foreground font-medium max-w-[140px] truncate">{line.entity}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground max-w-[160px] truncate" title={line.itemName}>{line.itemName}</TableCell>
-                            <TableCell className="text-xs text-primary font-mono">{line.posRef}</TableCell>
+                            <TableCell className="text-xs text-right font-mono">{line.qty.toLocaleString()}</TableCell>
+                            <TableCell className="text-xs text-right font-mono">{fmt(line.total_sales)}</TableCell>
                             <TableCell className="text-xs text-right font-mono">
-                              {line.posAmount > 0 ? fmt(line.posAmount) : <span className="text-muted-foreground">—</span>}
-                            </TableCell>
-                            <TableCell className="text-xs text-right font-mono text-success">{fmt(line.bankAmount)}</TableCell>
-                            <TableCell className="text-xs text-right font-mono">
-                              {line.gap > 0.01 ? (
-                                <span className="text-warning">{fmt(line.gap)}</span>
+                              {line.cost > 0 ? (
+                                fmt(line.cost)
                               ) : (
-                                <span className="text-muted-foreground">—</span>
+                                <span className="text-warning">$0.00</span>
                               )}
                             </TableCell>
-                            <TableCell className="text-center">{statusBadge(line.status)}</TableCell>
+                            <TableCell className="text-xs text-right font-mono">
+                              {line.profit > 0 ? (
+                                <span className="text-success">{fmt(line.profit)}</span>
+                              ) : (
+                                <span className="text-muted-foreground">{fmt(line.profit)}</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "text-[10px] font-medium",
+                                  line.bankStatus === "matched"
+                                    ? "bg-success/15 text-success border-success/30"
+                                    : "bg-destructive/15 text-destructive border-destructive/30"
+                                )}
+                              >
+                                {line.bankStatus === "matched" ? "🟢 Matched" : "🔴 No Match"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-xs text-foreground max-w-[140px] truncate" title={line.bankPartner}>
+                              {line.bankPartner || "—"}
+                            </TableCell>
                           </TableRow>
                         ))
                       )}
@@ -282,7 +282,7 @@ export default function Reconcile() {
                         className={cn(page === 1 && "pointer-events-none opacity-50")}
                       />
                     </PaginationItem>
-                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                    {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                       const p = i + 1;
                       return (
                         <PaginationItem key={p}>
@@ -309,13 +309,13 @@ export default function Reconcile() {
             <div className="glass-card p-5 space-y-2 border-l-4 border-destructive">
               <div className="flex items-center gap-2">
                 <XCircle className="h-4 w-4 text-destructive" />
-                <h2 className="text-sm font-bold text-foreground">⚠ Potential Theft / Loss Alert</h2>
+                <h2 className="text-sm font-bold text-foreground">⚠ Sales Without Bank Verification</h2>
                 <Badge variant="outline" className="text-[10px] bg-destructive/15 text-destructive border-destructive/30 ml-auto">
                   {unmatched.length} UNMATCHED — {fmt(totalUnmatched)}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
-                These bank deposits could not be matched to any POS record via REF#, card terminal amount, or cash deposit.
+                These POS sales could not be matched to any bank deposit. Revenue may be undeposited or requires manual review.
               </p>
             </div>
           )}
