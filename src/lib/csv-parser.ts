@@ -205,6 +205,8 @@ export function parseSalesCSV(text: string): SalesRecord[] {
 export interface BankStatementRecord {
   date: string;
   transaction_details: string;
+  entity: string;
+  reference: string;
   money_in: number;
   money_out: number;
   currency: string;
@@ -239,6 +241,23 @@ export function parseBankStatementCSV(text: string): BankStatementRecord[] {
     const moneyOut = parseAccountingNumber(cols[4] ?? "0");
     const balance = parseAccountingNumber(cols[6] ?? "0");
 
+    // Extract entity name
+    let entity = "";
+    const paymentFromMatch = details.match(/PAYMENT FROM\s+(.+?)(?:\s*\*{3}|\s+\d{5,}|\s+BANK\s)/i);
+    const fundsToMatch = details.match(/FUNDS TRANSFERRED TO\s+(.+?)(?:\s+\d{5,})/i);
+    const fundsFromMatch = details.match(/FUNDS RECEIVED FROM\s+(.+?)(?:\s+\()/i);
+    if (paymentFromMatch) {
+      entity = paymentFromMatch[1].replace(/\*+/g, "").trim();
+    } else if (fundsToMatch) {
+      entity = fundsToMatch[1].trim();
+    } else if (fundsFromMatch) {
+      entity = fundsFromMatch[1].trim();
+    }
+
+    // Extract REF#
+    const refMatch = details.match(/REF#\s*(\S+)/i);
+    const reference = refMatch ? refMatch[1] : "";
+
     // Extract remark from transaction details (text after "REMARK:")
     const remarkMatch = details.match(/REMARK:\s*(.+?)(?:\s{2,}|REF#|PURCHASE#|$)/i);
     const remark = remarkMatch ? remarkMatch[1].trim() : "";
@@ -249,6 +268,8 @@ export function parseBankStatementCSV(text: string): BankStatementRecord[] {
     records.push({
       date,
       transaction_details: details,
+      entity,
+      reference,
       money_in: moneyIn,
       money_out: moneyOut,
       currency: ccy || "USD",

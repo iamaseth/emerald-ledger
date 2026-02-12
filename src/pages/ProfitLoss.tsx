@@ -13,32 +13,41 @@ const fmt = (n: number) =>
 const fmtSigned = (n: number) =>
   `${n < 0 ? "-" : ""}$${Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
 
-// Group expense categories for visual hierarchy
-const categoryGroups: Record<string, string> = {
-  "Cost of Beer and liquer": "Cost of Goods",
-  "Cigareet expense": "Cost of Goods",
-  "Kitchen expense - BSB": "Kitchen",
-  "Kitchen Expense - Burger Bun": "Kitchen",
-  "Kitchen expense - LSH": "Kitchen",
-  "Kitchen Expense - Pepperoni": "Kitchen",
-  "Kitchen expense - Salmon": "Kitchen",
-  "Kitchen - Cheese": "Kitchen",
-  "Kitchen - Other": "Kitchen",
-  "Kitchen- Miscellaneous expense": "Kitchen",
-  "Grocery expense": "Kitchen",
-  "Fruit expense": "Kitchen",
-  "Ice expense": "Kitchen",
-  "Gas expense": "Kitchen",
+// ─── CIFRS for SMEs Grouping ──────────────────────────────
+type CIFRSGroup = "COGS" | "Kitchen & Food" | "Payroll" | "Fixed & Admin" | "Operations" | "Marketing";
+
+const cifrsMapping: Record<string, CIFRSGroup> = {
+  "Cost of Beer and liquer": "COGS",
+  "Cigareet expense": "COGS",
+  "Kitchen expense - BSB": "Kitchen & Food",
+  "Kitchen Expense - Burger Bun": "Kitchen & Food",
+  "Kitchen expense - LSH": "Kitchen & Food",
+  "Kitchen Expense - Pepperoni": "Kitchen & Food",
+  "Kitchen expense - Salmon": "Kitchen & Food",
+  "Kitchen - Cheese": "Kitchen & Food",
+  "Kitchen - Other": "Kitchen & Food",
+  "Kitchen- Miscellaneous expense": "Kitchen & Food",
+  "Grocery expense": "Kitchen & Food",
+  "Fruit expense": "Kitchen & Food",
+  "Ice expense": "Kitchen & Food",
+  "Gas expense": "Kitchen & Food",
   "Payroll Expense": "Payroll",
   "Payroll-Overtime": "Payroll",
   "Casual worker": "Payroll",
-  "Rental Expense": "Fixed Costs",
-  "Electricity expense": "Fixed Costs",
-  "Water expense": "Fixed Costs",
-  "Internet Expense": "Fixed Costs",
-  "POS service": "Fixed Costs",
-  "Interest expense": "Fixed Costs",
-  "Monthly Tax expense": "Fixed Costs",
+  "Rental Expense": "Fixed & Admin",
+  "Electricity expense": "Fixed & Admin",
+  "Water expense": "Fixed & Admin",
+  "Internet Expense": "Fixed & Admin",
+  "POS service": "Fixed & Admin",
+  "Interest expense": "Fixed & Admin",
+  "Monthly Tax expense": "Fixed & Admin",
+  "Officer expense": "Fixed & Admin",
+  "Office Supply expense": "Fixed & Admin",
+  "Miscellaneous expenses": "Fixed & Admin",
+  "Other expense": "Fixed & Admin",
+  "Expense with no invoice": "Fixed & Admin",
+  "Drinking water for staffs": "Fixed & Admin",
+  "Transportation expense": "Fixed & Admin",
   "Facilities expense": "Operations",
   "Maintenance expense": "Operations",
   "Cleaning expense": "Operations",
@@ -48,23 +57,17 @@ const categoryGroups: Record<string, string> = {
   "Marketing expense": "Marketing",
   "Entertainment expense": "Marketing",
   "Event expenses": "Marketing",
-  "Officer expense": "Admin",
-  "Office Supply expense": "Admin",
-  "Miscellaneous expenses": "Admin",
-  "Other expense": "Admin",
-  "Expense with no invoice": "Admin",
-  "Drinking water for staffs": "Admin",
-  "Transportation expense": "Admin",
 };
 
-const groupColors: Record<string, string> = {
-  "Cost of Goods": "bg-destructive/15 text-destructive border-destructive/30",
-  Kitchen: "bg-warning/15 text-warning border-warning/30",
-  Payroll: "bg-info/15 text-info border-info/30",
-  "Fixed Costs": "bg-primary/15 text-primary border-primary/30",
-  Operations: "bg-secondary text-muted-foreground border-border",
-  Marketing: "bg-accent/15 text-accent border-accent/30",
-  Admin: "bg-muted text-muted-foreground border-border",
+const cifrsOrder: CIFRSGroup[] = ["COGS", "Kitchen & Food", "Payroll", "Fixed & Admin", "Operations", "Marketing"];
+
+const cifrsColors: Record<CIFRSGroup, string> = {
+  "COGS": "bg-destructive/15 text-destructive border-destructive/30",
+  "Kitchen & Food": "bg-warning/15 text-warning border-warning/30",
+  "Payroll": "bg-info/15 text-info border-info/30",
+  "Fixed & Admin": "bg-primary/15 text-primary border-primary/30",
+  "Operations": "bg-secondary text-muted-foreground border-border",
+  "Marketing": "bg-accent/15 text-accent-foreground border-accent",
 };
 
 export default function ProfitLoss() {
@@ -99,18 +102,22 @@ export default function ProfitLoss() {
   const totalProfitShare = data.profitShares.reduce((s, p) => s + p.amount, 0);
   const retainedProfit = data.grossProfit - totalProfitShare;
 
-  // Group expenses
-  const grouped = new Map<string, { items: typeof data.expenses; total: number }>();
+  // Group expenses by CIFRS categories
+  const grouped = new Map<CIFRSGroup, { items: typeof data.expenses; total: number }>();
+  cifrsOrder.forEach((g) => grouped.set(g, { items: [], total: 0 }));
+
   data.expenses.forEach((e) => {
-    const group = categoryGroups[e.category] || "Other";
-    if (!grouped.has(group)) grouped.set(group, { items: [], total: 0 });
+    const group = cifrsMapping[e.category] || "Fixed & Admin";
     const g = grouped.get(group)!;
     g.items.push(e);
     g.total += e.amount;
   });
 
-  // Sort groups by total descending
-  const sortedGroups = [...grouped.entries()].sort((a, b) => b[1].total - a[1].total);
+  // Compute COGS total for Gross Profit line
+  const cogsTotal = grouped.get("COGS")?.total ?? 0;
+  const kitchenTotal = grouped.get("Kitchen & Food")?.total ?? 0;
+  const totalDirectCosts = cogsTotal + kitchenTotal;
+  const grossAfterDirect = data.revenue - totalDirectCosts;
 
   return (
     <div className="space-y-6">
@@ -119,7 +126,7 @@ export default function ProfitLoss() {
         <div>
           <h1 className="text-xl font-bold text-foreground">Profit & Loss</h1>
           <p className="text-sm text-muted-foreground">
-            Income Statement — {data.period || "December 2025"}
+            CIFRS for SMEs — {data.period || "December 2025"}
           </p>
         </div>
         <ExportButton label="Export PDF" />
@@ -127,61 +134,32 @@ export default function ProfitLoss() {
 
       {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KPICard
-          title="Revenue"
-          value={fmt(data.revenue)}
-          icon={DollarSign}
-          trend="up"
-          trendValue="Gross sales"
-        />
-        <KPICard
-          title="Total Expenses"
-          value={fmt(data.totalExpense)}
-          icon={TrendingDown}
-          trendValue={`${((data.totalExpense / data.revenue) * 100).toFixed(0)}% of revenue`}
-        />
-        <KPICard
-          title="Gross Profit"
-          value={fmtSigned(data.grossProfit)}
-          icon={TrendingUp}
-          trend={data.grossProfit > 0 ? "up" : "down"}
-          trendValue={`${profitMargin}% margin`}
-        />
-        <KPICard
-          title="Retained Profit"
-          value={fmtSigned(retainedProfit)}
-          icon={BarChart3}
-          trend={retainedProfit > 0 ? "up" : "down"}
-          trendValue={`After ${fmt(totalProfitShare)} profit shares`}
-        />
+        <KPICard title="Revenue" value={fmt(data.revenue)} icon={DollarSign} trend="up" trendValue="Operating income" />
+        <KPICard title="Total Expenses" value={fmt(data.totalExpense)} icon={TrendingDown} trendValue={`${((data.totalExpense / data.revenue) * 100).toFixed(0)}% of revenue`} />
+        <KPICard title="Gross Profit" value={fmtSigned(data.grossProfit)} icon={TrendingUp} trend={data.grossProfit > 0 ? "up" : "down"} trendValue={`${profitMargin}% margin`} />
+        <KPICard title="Retained Profit" value={fmtSigned(retainedProfit)} icon={BarChart3} trend={retainedProfit > 0 ? "up" : "down"} trendValue={`After ${fmt(totalProfitShare)} distributions`} />
       </div>
 
-      {/* Expense Breakdown by Group */}
+      {/* CIFRS Expense Breakdown */}
       <div className="glass-card p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-foreground">Expense Breakdown</h2>
-
-        {/* Visual bar chart */}
+        <h2 className="text-sm font-semibold text-foreground">CIFRS Expense Breakdown</h2>
         <div className="space-y-3">
-          {sortedGroups.map(([group, { total }]) => {
+          {cifrsOrder.map((group) => {
+            const { total } = grouped.get(group)!;
+            if (total === 0) return null;
             const pct = (total / data.totalExpense) * 100;
-            const colorClass = groupColors[group] || groupColors.Admin;
             return (
               <div key={group} className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className={cn("text-[10px]", colorClass)}>
-                      {group}
-                    </Badge>
-                  </div>
+                  <Badge variant="outline" className={cn("text-[10px]", cifrsColors[group])}>
+                    {group}
+                  </Badge>
                   <span className="font-mono text-foreground">
                     {fmt(total)} <span className="text-muted-foreground">({pct.toFixed(1)}%)</span>
                   </span>
                 </div>
                 <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-primary/70 transition-all"
-                    style={{ width: `${pct}%` }}
-                  />
+                  <div className="h-full rounded-full bg-primary/70 transition-all" style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );
@@ -189,98 +167,116 @@ export default function ProfitLoss() {
         </div>
       </div>
 
-      {/* Detailed Table */}
+      {/* CIFRS Income Statement Table */}
       <div className="glass-card overflow-hidden">
         <div className="overflow-auto">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent border-border">
-                <TableHead className="text-muted-foreground text-xs">Category</TableHead>
-                <TableHead className="text-muted-foreground text-xs">Group</TableHead>
+                <TableHead className="text-muted-foreground text-xs">Line Item</TableHead>
+                <TableHead className="text-muted-foreground text-xs">Classification</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-right">Amount</TableHead>
                 <TableHead className="text-muted-foreground text-xs text-right">% of Revenue</TableHead>
                 <TableHead className="text-muted-foreground text-xs">Note</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* Revenue row */}
+              {/* Operating Income */}
               <TableRow className="border-border bg-primary/5">
-                <TableCell className="text-sm font-bold text-primary">Revenue</TableCell>
+                <TableCell className="text-sm font-bold text-primary">Operating Income (Revenue)</TableCell>
                 <TableCell />
                 <TableCell className="text-sm text-right font-bold text-primary">{fmt(data.revenue)}</TableCell>
                 <TableCell className="text-xs text-right text-muted-foreground">100%</TableCell>
                 <TableCell />
               </TableRow>
 
-              {/* Expense rows */}
-              {data.expenses
-                .filter((e) => e.amount > 0)
-                .sort((a, b) => b.amount - a.amount)
-                .map((e) => {
-                  const group = categoryGroups[e.category] || "Other";
-                  const colorClass = groupColors[group] || groupColors.Admin;
-                  const pct = ((e.amount / data.revenue) * 100).toFixed(1);
-                  return (
-                    <TableRow key={e.category} className="border-border hover:bg-secondary/40">
-                      <TableCell className="text-xs text-foreground">{e.category}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={cn("text-[10px]", colorClass)}>
-                          {group}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-xs text-right font-mono text-destructive">
-                        -{fmt(e.amount)}
-                      </TableCell>
-                      <TableCell className="text-xs text-right text-muted-foreground">{pct}%</TableCell>
-                      <TableCell className="text-xs text-muted-foreground max-w-[200px] truncate">
-                        {e.note}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+              {/* CIFRS groups */}
+              {cifrsOrder.map((group) => {
+                const { items, total } = grouped.get(group)!;
+                const activeItems = items.filter((e) => e.amount > 0).sort((a, b) => b.amount - a.amount);
+                if (activeItems.length === 0) return null;
 
-              {/* Total Expense row */}
+                return (
+                  <>
+                    {/* Group subtotal header */}
+                    <TableRow key={`${group}-header`} className="border-border bg-muted/30">
+                      <TableCell className="text-xs font-bold text-foreground">{group}</TableCell>
+                      <TableCell />
+                      <TableCell className="text-xs text-right font-bold text-destructive">-{fmt(total)}</TableCell>
+                      <TableCell className="text-xs text-right text-muted-foreground">{((total / data.revenue) * 100).toFixed(1)}%</TableCell>
+                      <TableCell />
+                    </TableRow>
+                    {/* Individual items */}
+                    {activeItems.map((e) => (
+                      <TableRow key={e.category} className="border-border hover:bg-secondary/40">
+                        <TableCell className="text-xs text-foreground pl-6">{e.category}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={cn("text-[10px]", cifrsColors[group])}>
+                            {group}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs text-right font-mono text-destructive">-{fmt(e.amount)}</TableCell>
+                        <TableCell className="text-xs text-right text-muted-foreground">{((e.amount / data.revenue) * 100).toFixed(1)}%</TableCell>
+                        <TableCell className="text-xs text-muted-foreground max-w-[200px] truncate">{e.note}</TableCell>
+                      </TableRow>
+                    ))}
+                    {/* Subtotal after COGS+Kitchen = Gross Profit */}
+                    {group === "Kitchen & Food" && (
+                      <TableRow className="border-border bg-success/5 border-t-2">
+                        <TableCell className="text-sm font-bold text-success">Gross Profit (after COGS + Kitchen)</TableCell>
+                        <TableCell />
+                        <TableCell className="text-sm text-right font-bold text-success">{fmtSigned(grossAfterDirect)}</TableCell>
+                        <TableCell className="text-xs text-right font-semibold text-muted-foreground">{((grossAfterDirect / data.revenue) * 100).toFixed(1)}%</TableCell>
+                        <TableCell />
+                      </TableRow>
+                    )}
+                  </>
+                );
+              })}
+
+              {/* Total Expense */}
               <TableRow className="border-border bg-destructive/5 border-t-2">
                 <TableCell className="text-sm font-bold text-destructive">Total Expenses</TableCell>
                 <TableCell />
-                <TableCell className="text-sm text-right font-bold text-destructive">
-                  -{fmt(data.totalExpense)}
-                </TableCell>
-                <TableCell className="text-xs text-right font-semibold text-muted-foreground">
-                  {((data.totalExpense / data.revenue) * 100).toFixed(0)}%
-                </TableCell>
+                <TableCell className="text-sm text-right font-bold text-destructive">-{fmt(data.totalExpense)}</TableCell>
+                <TableCell className="text-xs text-right font-semibold text-muted-foreground">{((data.totalExpense / data.revenue) * 100).toFixed(0)}%</TableCell>
                 <TableCell />
               </TableRow>
 
-              {/* Gross Profit row */}
+              {/* Net Profit */}
               <TableRow className="border-border bg-primary/5">
-                <TableCell className="text-sm font-bold text-foreground">Gross Profit</TableCell>
+                <TableCell className="text-sm font-bold text-foreground">Net Profit / (Loss)</TableCell>
                 <TableCell />
                 <TableCell className={cn("text-sm text-right font-bold", data.grossProfit >= 0 ? "text-success" : "text-destructive")}>
                   {fmtSigned(data.grossProfit)}
                 </TableCell>
-                <TableCell className="text-xs text-right font-semibold text-muted-foreground">
-                  {profitMargin}%
-                </TableCell>
+                <TableCell className="text-xs text-right font-semibold text-muted-foreground">{profitMargin}%</TableCell>
                 <TableCell />
               </TableRow>
 
               {/* Profit shares */}
               {data.profitShares.map((ps) => (
                 <TableRow key={ps.name} className="border-border hover:bg-secondary/40">
-                  <TableCell className="text-xs text-foreground">Profit Share — {ps.name}</TableCell>
+                  <TableCell className="text-xs text-foreground pl-6">Distribution — {ps.name}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="text-[10px] bg-info/15 text-info border-info/30">
-                      Distribution
-                    </Badge>
+                    <Badge variant="outline" className="text-[10px] bg-info/15 text-info border-info/30">Distribution</Badge>
                   </TableCell>
-                  <TableCell className="text-xs text-right font-mono text-info">
-                    {fmt(ps.amount)}
-                  </TableCell>
+                  <TableCell className="text-xs text-right font-mono text-info">{fmt(ps.amount)}</TableCell>
                   <TableCell />
                   <TableCell />
                 </TableRow>
               ))}
+
+              {/* Retained */}
+              <TableRow className="border-border bg-primary/10 border-t-2">
+                <TableCell className="text-sm font-bold text-foreground">Retained Earnings</TableCell>
+                <TableCell />
+                <TableCell className={cn("text-sm text-right font-bold", retainedProfit >= 0 ? "text-success" : "text-destructive")}>
+                  {fmtSigned(retainedProfit)}
+                </TableCell>
+                <TableCell className="text-xs text-right font-semibold text-muted-foreground">{((retainedProfit / data.revenue) * 100).toFixed(1)}%</TableCell>
+                <TableCell />
+              </TableRow>
             </TableBody>
           </Table>
         </div>
