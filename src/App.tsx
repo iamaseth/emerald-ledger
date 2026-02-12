@@ -17,6 +17,7 @@ import ProfitLoss from "./pages/ProfitLoss";
 import AccountsPayable from "./pages/AccountsPayable";
 import DataTools from "./pages/DataTools";
 import DataQuality from "./pages/DataQuality";
+import Reconcile from "./pages/Reconcile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/profit-loss" element={<ProfitLoss />} />
               <Route path="/data-tools" element={<DataTools />} />
               <Route path="/data-quality" element={<DataQuality />} />
+              <Route path="/reconcile" element={<Reconcile />} />
               <Route path="/settings" element={<AdminSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

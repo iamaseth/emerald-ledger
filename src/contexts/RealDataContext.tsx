@@ -69,11 +69,35 @@ export function RealDataProvider({ children }: { children: ReactNode }) {
 
         if (cancelled) return;
 
+        const rawSales = parseSalesCSV(salesText);
+        const inventoryData = parseInventoryCSV(inventoryText);
+
+        // Cost-linking: replace $0 costs with Total COG from inventory
+        const cogMap = new Map<string, number>();
+        inventoryData.forEach((inv) => {
+          if (inv.total_cog > 0) {
+            cogMap.set(inv.item_name.toLowerCase(), inv.total_cog);
+          }
+          if (inv.cog > 0) {
+            cogMap.set(inv.item_name.toLowerCase(), cogMap.get(inv.item_name.toLowerCase()) || inv.cog);
+          }
+        });
+
+        const linkedSales = rawSales.map((s) => {
+          if (s.cost === 0 && s.qty > 0) {
+            const invCog = cogMap.get(s.item_name.toLowerCase());
+            if (invCog) {
+              return { ...s, cost: invCog };
+            }
+          }
+          return s;
+        });
+
         setData({
-          sales: parseSalesCSV(salesText),
+          sales: linkedSales,
           bank: parseBankStatementCSV(bankText),
           bankSales: parseBankStatementCSV(bankSalesText),
-          inventory: parseInventoryCSV(inventoryText),
+          inventory: inventoryData,
           income: parseIncomeStatement(incomeText),
           purchases: parsePurchasesCSV(purchasesText),
         });

@@ -213,6 +213,77 @@ export interface BankStatementRecord {
   balance: number;
   remark: string;
   matched_bill_id: string | null;
+  destination: string;
+}
+
+/** Income Statement categories for destination mapping */
+export const DESTINATION_CATEGORIES = [
+  "Sales Revenue",
+  "Cost of Beer and liquor",
+  "Cigarette expense",
+  "Cleaning expense",
+  "Decoration expense",
+  "Drinking water for staffs",
+  "Electricity expense",
+  "Entertainment expense",
+  "Water expense",
+  "Event expenses",
+  "Expense with no invoice",
+  "Facilities expense",
+  "Flower expense",
+  "Fruit expense",
+  "Gas expense",
+  "Grocery expense",
+  "Ice expense",
+  "Interest expense",
+  "Kitchen expense - BSB",
+  "Kitchen Expense - Burger Bun",
+  "Kitchen expense - LSH",
+  "Kitchen Expense - Pepperoni",
+  "Kitchen expense - Salmon",
+  "Kitchen - Cheese",
+  "Kitchen - Other",
+  "Kitchen - Miscellaneous expense",
+  "Maintenance expense",
+  "Marketing expense",
+  "Miscellaneous expenses",
+  "Monthly Tax expense",
+  "Music system rental expense",
+  "Officer expense",
+  "Office Supply expense",
+  "Other expense",
+  "Casual worker",
+  "Transportation expense",
+  "Rental Expense",
+  "Internet Expense",
+  "POS service",
+  "Payroll Expense",
+  "Payroll-Overtime",
+  "Owner Distribution",
+  "Bank Transfer",
+  "Uncategorized",
+];
+
+/** Auto-map destination based on remark/entity/details */
+function autoMapDestination(remark: string, entity: string, details: string): string {
+  const text = `${remark} ${entity} ${details}`.toLowerCase();
+  if (text.includes("back street") || text.includes("backstreet") || text.includes("pos") || text.includes("sale")) return "Sales Revenue";
+  if (text.includes("rent")) return "Rental Expense";
+  if (text.includes("payroll") || text.includes("salary")) return "Payroll Expense";
+  if (text.includes("electric")) return "Electricity expense";
+  if (text.includes("internet") || text.includes("wifi")) return "Internet Expense";
+  if (text.includes("tax")) return "Monthly Tax expense";
+  if (text.includes("beer") || text.includes("liquor") || text.includes("alcohol")) return "Cost of Beer and liquor";
+  if (text.includes("kitchen") || text.includes("food")) return "Kitchen expense - BSB";
+  if (text.includes("ice")) return "Ice expense";
+  if (text.includes("gas")) return "Gas expense";
+  if (text.includes("water")) return "Water expense";
+  if (text.includes("clean")) return "Cleaning expense";
+  if (text.includes("flower")) return "Flower expense";
+  if (text.includes("grocery")) return "Grocery expense";
+  if (text.includes("maintenance") || text.includes("repair")) return "Maintenance expense";
+  if (text.includes("marketing") || text.includes("advert")) return "Marketing expense";
+  return "";
 }
 
 export function parseBankStatementCSV(text: string): BankStatementRecord[] {
@@ -276,6 +347,7 @@ export function parseBankStatementCSV(text: string): BankStatementRecord[] {
       balance,
       remark,
       matched_bill_id: billMatch ? billMatch[1] : null,
+      destination: autoMapDestination(remark, entity, details),
     });
   }
 

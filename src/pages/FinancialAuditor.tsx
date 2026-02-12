@@ -2,10 +2,12 @@ import { useState, useMemo } from "react";
 import { useRealData } from "@/contexts/RealDataContext";
 import { KPICard } from "@/components/shared/KPICard";
 import { ExportButton } from "@/components/shared/ExportButton";
+import { DESTINATION_CATEGORIES } from "@/lib/csv-parser";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DollarSign, Landmark, ShieldCheck, ArrowUpRight, ArrowDownRight, FileSpreadsheet, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,8 @@ export default function FinancialAuditor() {
   const { sales, bank, bankSales, loading } = useRealData();
   const [showExpensesOnly, setShowExpensesOnly] = useState(false);
   const [activeTab, setActiveTab] = useState("bank");
+  // Local destination overrides keyed by txn index
+  const [destOverrides, setDestOverrides] = useState<Record<number, string>>({});
 
   // Derive KPIs from real data
   const totalSalesRevenue = sales.reduce((s, r) => s + r.total_sales, 0);
@@ -32,6 +36,10 @@ export default function FinancialAuditor() {
   const expenseCount = bank.filter((r) => r.money_out > 0).length;
   const depositCount = bank.filter((r) => r.money_in > 0).length;
 
+  // Get destination for a row
+  const getDestination = (i: number, txn: typeof bank[0]) =>
+    destOverrides[i] ?? txn.destination;
+
   // ─── Batch Reconciliation Logic ─────────────────────────
   const bankDeposits = useMemo(() => {
     return bankSales.filter((b) => b.money_in > 0).map((b) => ({
@@ -44,7 +52,6 @@ export default function FinancialAuditor() {
   const totalDeposits = useMemo(() => bankDeposits.reduce((s, r) => s + r.amount, 0), [bankDeposits]);
   const reconGap = totalPOSSales - totalDeposits;
 
-  // Group bank deposits by date for daily close view
   const dailyRecon = useMemo(() => {
     const byDate = new Map<string, { deposits: number; count: number; refs: string[] }>();
     bankDeposits.forEach((b) => {
@@ -84,36 +91,13 @@ export default function FinancialAuditor() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-4">
-        <KPICard
-          title="Total POS Sales"
-          value={fmt(totalSalesRevenue)}
-          icon={DollarSign}
-          trendValue={`${sales.length} items`}
-        />
-        <KPICard
-          title="Net Revenue"
-          value={fmt(totalNetRevenue)}
-          icon={DollarSign}
-          trend="up"
-          trendValue="After discounts"
-        />
-        <KPICard
-          title="Bank Deposits"
-          value={fmt(totalBankIn)}
-          icon={Landmark}
-          trend="up"
-          trendValue={`${depositCount} deposits`}
-        />
-        <KPICard
-          title="Bank Expenses"
-          value={fmt(totalBankOut)}
-          icon={ShieldCheck}
-          trend="down"
-          trendValue={`${expenseCount} transactions`}
-        />
+        <KPICard title="Total POS Sales" value={fmt(totalSalesRevenue)} icon={DollarSign} trendValue={`${sales.length} items`} />
+        <KPICard title="Net Revenue" value={fmt(totalNetRevenue)} icon={DollarSign} trend="up" trendValue="After discounts" />
+        <KPICard title="Bank Deposits" value={fmt(totalBankIn)} icon={Landmark} trend="up" trendValue={`${depositCount} deposits`} />
+        <KPICard title="Bank Expenses" value={fmt(totalBankOut)} icon={ShieldCheck} trend="down" trendValue={`${expenseCount} transactions`} />
       </div>
 
-      {/* Tabs: Bank Ledger vs Batch Reconciliation */}
+      {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-muted/50">
           <TabsTrigger value="bank">Triple-Split Ledger</TabsTrigger>
@@ -122,7 +106,6 @@ export default function FinancialAuditor() {
 
         {/* ─── TAB 1: Triple-Split Bank Ledger ─────────────── */}
         <TabsContent value="bank" className="space-y-4 mt-4">
-          {/* Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
@@ -139,18 +122,14 @@ export default function FinancialAuditor() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Switch
-                id="expense-toggle"
-                checked={showExpensesOnly}
-                onCheckedChange={setShowExpensesOnly}
-              />
+              <Switch id="expense-toggle" checked={showExpensesOnly} onCheckedChange={setShowExpensesOnly} />
               <Label htmlFor="expense-toggle" className="text-xs text-muted-foreground cursor-pointer">
                 Expenses Only ({expenseCount})
               </Label>
             </div>
           </div>
 
-          {/* Triple-Split Bank Table */}
+          {/* Bank Table with Destination */}
           <div className="glass-card overflow-hidden">
             <div className="overflow-auto">
               <Table>
@@ -164,18 +143,20 @@ export default function FinancialAuditor() {
                     <TableHead className="text-muted-foreground text-xs text-right">Money Out</TableHead>
                     <TableHead className="text-muted-foreground text-xs text-right">Balance</TableHead>
                     <TableHead className="text-muted-foreground text-xs text-center">Type</TableHead>
+                    <TableHead className="text-muted-foreground text-xs">Destination</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredBank.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="text-center text-sm text-muted-foreground py-12">
+                      <TableCell colSpan={9} className="text-center text-sm text-muted-foreground py-12">
                         No transactions found.
                       </TableCell>
                     </TableRow>
                   ) : (
                     filteredBank.map((txn, i) => {
                       const isDeposit = txn.money_in > 0;
+                      const dest = getDestination(i, txn);
                       return (
                         <TableRow key={i} className="border-border hover:bg-secondary/40">
                           <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{txn.date}</TableCell>
@@ -218,6 +199,25 @@ export default function FinancialAuditor() {
                               {isDeposit ? "Deposit" : "Expense"}
                             </Badge>
                           </TableCell>
+                          <TableCell className="min-w-[180px]">
+                            <Select
+                              value={dest || "Uncategorized"}
+                              onValueChange={(val) =>
+                                setDestOverrides((prev) => ({ ...prev, [i]: val }))
+                              }
+                            >
+                              <SelectTrigger className="h-7 text-[11px] border-border bg-background">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-popover border-border z-50 max-h-[300px]">
+                                {DESTINATION_CATEGORIES.map((cat) => (
+                                  <SelectItem key={cat} value={cat} className="text-xs">
+                                    {cat}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
                         </TableRow>
                       );
                     })
@@ -230,7 +230,6 @@ export default function FinancialAuditor() {
 
         {/* ─── TAB 2: Batch Reconciliation ─────────────────── */}
         <TabsContent value="recon" className="space-y-4 mt-4">
-          {/* Recon Summary Cards */}
           <div className="grid gap-4 sm:grid-cols-4">
             <div className="glass-card p-4">
               <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">POS Total</p>
@@ -256,7 +255,6 @@ export default function FinancialAuditor() {
             </div>
           </div>
 
-          {/* Daily Close Table */}
           <div className="glass-card p-5 space-y-3">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
@@ -297,7 +295,6 @@ export default function FinancialAuditor() {
             </div>
           </div>
 
-          {/* Unmatched Deposits (Theft/Error Alert) */}
           {unmatchedDeposits > 0 && (
             <div className="glass-card p-5 space-y-3">
               <div className="flex items-center gap-2">
