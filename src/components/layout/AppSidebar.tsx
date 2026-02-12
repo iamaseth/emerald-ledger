@@ -17,12 +17,14 @@ import {
   ChevronRight,
   Menu,
   X,
+  GitCompareArrows,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { title: "Executive Pulse", url: "/", icon: Activity },
   { title: "Financial Auditor", url: "/financial-auditor", icon: Scale },
+  { title: "Reconciliator", url: "/reconcile", icon: GitCompareArrows },
   { title: "Audit Log", url: "/audit-log", icon: ShieldAlert },
   { title: "Menu & COGS", url: "/menu-cogs", icon: UtensilsCrossed },
   { title: "Inventory Vault", url: "/inventory", icon: Warehouse },
