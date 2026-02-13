@@ -70,7 +70,15 @@ export function PeriodProvider({ children }: { children: ReactNode }) {
     };
   }, [sales, bank, mode, customRange]);
 
-  const periodLabel = "December 2025";
+  const periodLabel = useMemo(() => {
+    if (mode === "custom" && customRange) {
+      const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      return `${fmt(customRange.from)} – ${fmt(customRange.to)}`;
+    }
+    if (mode === "daily") return new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    if (mode === "weekly") return "This Week";
+    return "All Periods";
+  }, [mode, customRange]);
 
   return (
     <PeriodContext.Provider value={{ mode, changeMode, customRange, changeCustomRange, stats, isPending, periodLabel }}>
