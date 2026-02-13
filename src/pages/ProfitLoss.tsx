@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { DollarSign, TrendingDown, TrendingUp, AlertTriangle, BarChart3 } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const fmt = (n: number) =>
   `$${Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 0 })}`;
@@ -70,6 +71,15 @@ const cifrsColors: Record<CIFRSGroup, string> = {
   "Marketing": "bg-accent/15 text-accent-foreground border-accent",
 };
 
+const DONUT_COLORS = [
+  "hsl(0, 72%, 51%)",     // COGS - destructive
+  "hsl(38, 92%, 50%)",    // Kitchen - warning
+  "hsl(210, 80%, 55%)",   // Payroll - info
+  "hsl(152, 60%, 48%)",   // Fixed & Admin - primary
+  "hsl(215, 25%, 40%)",   // Operations
+  "hsl(280, 60%, 55%)",   // Marketing
+];
+
 export default function ProfitLoss() {
   const { data, loading, error } = useIncomeStatement();
 
@@ -126,7 +136,7 @@ export default function ProfitLoss() {
         <div>
           <h1 className="text-xl font-bold text-foreground">Profit & Loss</h1>
           <p className="text-sm text-muted-foreground">
-            CIFRS for SMEs — {data.period || "December 2025"}
+            CIFRS for SMEs — {data.period || "All Periods"}
           </p>
         </div>
         <ExportButton label="Export PDF" />
@@ -140,30 +150,74 @@ export default function ProfitLoss() {
         <KPICard title="Retained Profit" value={fmtSigned(retainedProfit)} icon={BarChart3} trend={retainedProfit > 0 ? "up" : "down"} trendValue={`After ${fmt(totalProfitShare)} distributions`} />
       </div>
 
-      {/* CIFRS Expense Breakdown */}
-      <div className="glass-card p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-foreground">CIFRS Expense Breakdown</h2>
-        <div className="space-y-3">
-          {cifrsOrder.map((group) => {
-            const { total } = grouped.get(group)!;
-            if (total === 0) return null;
-            const pct = (total / data.totalExpense) * 100;
-            return (
-              <div key={group} className="space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <Badge variant="outline" className={cn("text-[10px]", cifrsColors[group])}>
-                    {group}
-                  </Badge>
-                  <span className="font-mono text-foreground">
-                    {fmt(total)} <span className="text-muted-foreground">({pct.toFixed(1)}%)</span>
-                  </span>
+      {/* CIFRS Expense Breakdown with Donut Chart */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Donut Chart */}
+        <div className="glass-card p-6">
+          <h2 className="text-sm font-semibold text-foreground mb-4">Expense Category Breakdown</h2>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie
+                data={cifrsOrder.map((group, i) => ({ name: group, value: grouped.get(group)?.total ?? 0 })).filter((d) => d.value > 0)}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={3}
+                dataKey="value"
+              >
+                {cifrsOrder.map((group, i) => {
+                  const total = grouped.get(group)?.total ?? 0;
+                  return total > 0 ? <Cell key={group} fill={DONUT_COLORS[i]} /> : null;
+                }).filter(Boolean)}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  background: "hsl(222 40% 10%)",
+                  border: "1px solid hsl(215 20% 16%)",
+                  borderRadius: "8px",
+                  color: "hsl(210 20% 92%)",
+                  fontSize: 12,
+                }}
+                formatter={(value: number) => [`$${value.toLocaleString()}`, undefined]}
+              />
+              <Legend
+                wrapperStyle={{ fontSize: 11, color: "hsl(215 15% 55%)" }}
+                formatter={(value: string) => {
+                  const total = grouped.get(value as CIFRSGroup)?.total ?? 0;
+                  const pct = ((total / data.totalExpense) * 100).toFixed(0);
+                  return `${value} (${pct}%)`;
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Bar breakdown */}
+        <div className="glass-card p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-foreground">CIFRS Expense Breakdown</h2>
+          <div className="space-y-3">
+            {cifrsOrder.map((group) => {
+              const { total } = grouped.get(group)!;
+              if (total === 0) return null;
+              const pct = (total / data.totalExpense) * 100;
+              return (
+                <div key={group} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <Badge variant="outline" className={cn("text-[10px]", cifrsColors[group])}>
+                      {group}
+                    </Badge>
+                    <span className="font-mono text-foreground">
+                      {fmt(total)} <span className="text-muted-foreground">({pct.toFixed(1)}%)</span>
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                    <div className="h-full rounded-full bg-primary/70 transition-all" style={{ width: `${pct}%` }} />
+                  </div>
                 </div>
-                <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                  <div className="h-full rounded-full bg-primary/70 transition-all" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
 

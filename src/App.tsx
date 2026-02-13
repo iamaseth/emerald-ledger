@@ -10,11 +10,13 @@ import ExecutivePulse from "./pages/ExecutivePulse";
 import FinancialAuditor from "./pages/FinancialAuditor";
 import AuditLog from "./pages/AuditLog";
 import MenuCogs from "./pages/MenuCogs";
+import MenuManager from "./pages/MenuManager";
 import InventoryVault from "./pages/InventoryVault";
 import StaffIntelligence from "./pages/StaffIntelligence";
 import AdminSettings from "./pages/AdminSettings";
 import ProfitLoss from "./pages/ProfitLoss";
 import AccountsPayable from "./pages/AccountsPayable";
+import Suppliers from "./pages/Suppliers";
 import DataTools from "./pages/DataTools";
 import DataQuality from "./pages/DataQuality";
 import Reconcile from "./pages/Reconcile";
@@ -36,9 +38,11 @@ const App = () => (
               <Route path="/financial-auditor" element={<FinancialAuditor />} />
               <Route path="/audit-log" element={<AuditLog />} />
               <Route path="/menu-cogs" element={<MenuCogs />} />
+              <Route path="/menu-manager" element={<MenuManager />} />
               <Route path="/inventory" element={<InventoryVault />} />
               <Route path="/staff" element={<StaffIntelligence />} />
               <Route path="/accounts-payable" element={<AccountsPayable />} />
+              <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/profit-loss" element={<ProfitLoss />} />
               <Route path="/data-tools" element={<DataTools />} />
               <Route path="/data-quality" element={<DataQuality />} />
