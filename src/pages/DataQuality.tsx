@@ -144,7 +144,7 @@ export default function DataQuality() {
       <div>
         <h1 className="text-xl font-bold text-foreground">Data Onboarding & Quality</h1>
         <p className="text-sm text-muted-foreground">
-          December 2025 — Automated data integrity analysis
+          Automated data integrity analysis — All Periods
         </p>
       </div>
 

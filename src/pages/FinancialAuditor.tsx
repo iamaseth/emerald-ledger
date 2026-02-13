@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DollarSign, Landmark, ShieldCheck, ArrowUpRight, ArrowDownRight, FileSpreadsheet, CheckCircle, XCircle, AlertTriangle, Play } from "lucide-react";
+import { DollarSign, Landmark, ShieldCheck, ArrowUpRight, ArrowDownRight, FileSpreadsheet, CheckCircle, XCircle, AlertTriangle, Play, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ChannelType = "QR Code" | "Card Payment" | "Bank Transfer" | "Cash" | "Other";
@@ -39,6 +39,9 @@ const fmt = (n: number) =>
 
 const PAGE_SIZE = 50;
 
+type SortField = "date" | "money_in" | "money_out" | "balance" | "entity";
+type SortDir = "asc" | "desc";
+
 export default function FinancialAuditor() {
   const { sales, bank, bankSales, loading } = useRealData();
   const [showExpensesOnly, setShowExpensesOnly] = useState(false);
@@ -47,6 +50,14 @@ export default function FinancialAuditor() {
   const [bankPage, setBankPage] = useState(1);
   const [reconPage, setReconPage] = useState(1);
   const [cellModal, setCellModal] = useState<{ title: string; content: string } | null>(null);
+
+  // Sorting
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  // Filters
+  const [staffFilter, setStaffFilter] = useState("All");
+  const [channelFilter, setChannelFilter] = useState("All");
 
   // --- Recon is now on-demand ---
   const [reconRan, setReconRan] = useState(false);
@@ -57,15 +68,49 @@ export default function FinancialAuditor() {
   const totalBankOut = bank.reduce((s, r) => s + r.money_out, 0);
   const netBankFlow = totalBankIn - totalBankOut;
 
-  const filteredBank = showExpensesOnly ? bank.filter((r) => r.money_out > 0) : bank;
+  // Unique entities for staff filter
+  const uniqueEntities = useMemo(() => [...new Set(bank.map((b) => b.entity).filter(Boolean))].sort(), [bank]);
+
+  const filteredBank = useMemo(() => {
+    let list = bank;
+    if (showExpensesOnly) list = list.filter((r) => r.money_out > 0);
+    if (staffFilter !== "All") list = list.filter((r) => r.entity === staffFilter);
+    if (channelFilter !== "All") list = list.filter((r) => detectChannel(r.remark) === channelFilter);
+
+    if (sortField) {
+      list = [...list].sort((a, b) => {
+        let cmp = 0;
+        if (sortField === "date") cmp = a.date.localeCompare(b.date);
+        else if (sortField === "entity") cmp = (a.entity || "").localeCompare(b.entity || "");
+        else cmp = (a[sortField] ?? 0) - (b[sortField] ?? 0);
+        return sortDir === "desc" ? -cmp : cmp;
+      });
+    }
+    return list;
+  }, [bank, showExpensesOnly, staffFilter, channelFilter, sortField, sortDir]);
+
   const expenseCount = bank.filter((r) => r.money_out > 0).length;
   const depositCount = bank.filter((r) => r.money_in > 0).length;
 
   const getDestination = (i: number, txn: typeof bank[0]) => destOverrides[i] ?? txn.destination;
 
-  // Pagination for bank ledger
   const bankTotalPages = Math.ceil(filteredBank.length / PAGE_SIZE);
   const pagedBank = filteredBank.slice((bankPage - 1) * PAGE_SIZE, bankPage * PAGE_SIZE);
+
+  function toggleSort(field: SortField) {
+    if (sortField === field) {
+      setSortDir((d) => d === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDir("asc");
+    }
+    setBankPage(1);
+  }
+
+  function SortIcon({ field }: { field: SortField }) {
+    if (sortField !== field) return <ArrowUpDown className="h-3 w-3 ml-1 inline opacity-40" />;
+    return sortDir === "asc" ? <ArrowUp className="h-3 w-3 ml-1 inline text-primary" /> : <ArrowDown className="h-3 w-3 ml-1 inline text-primary" />;
+  }
 
   // ─── Lazy Batch Reconciliation ─────────────────────────
   const bankDeposits = useMemo(() => {
@@ -119,7 +164,7 @@ export default function FinancialAuditor() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-foreground">Financial Auditor</h1>
-          <p className="text-sm text-muted-foreground">December 2025 — Emerald Ledger v2.0</p>
+          <p className="text-sm text-muted-foreground">Emerald Ledger v2.0 — All Periods</p>
         </div>
         <ExportButton label="Export Excel" />
       </div>
@@ -141,7 +186,8 @@ export default function FinancialAuditor() {
 
         {/* TAB 1: Triple-Split Bank Ledger */}
         <TabsContent value="bank" className="space-y-4 mt-4">
-          <div className="flex items-center justify-between">
+          {/* Filters toolbar */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <ArrowUpRight className="h-3.5 w-3.5 text-success" />
@@ -164,19 +210,55 @@ export default function FinancialAuditor() {
             </div>
           </div>
 
+          {/* Global Filters */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Select value={staffFilter} onValueChange={(v) => { setStaffFilter(v); setBankPage(1); }}>
+              <SelectTrigger className="w-full sm:w-[200px] h-9 bg-secondary border-border text-xs">
+                <SelectValue placeholder="Filter by Entity" />
+              </SelectTrigger>
+              <SelectContent className="bg-popover border-border z-50 max-h-[300px]">
+                <SelectItem value="All" className="text-xs">All Entities</SelectItem>
+                {uniqueEntities.map((e) => <SelectItem key={e} value={e} className="text-xs">{e}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={channelFilter} onValueChange={(v) => { setChannelFilter(v); setBankPage(1); }}>
+              <SelectTrigger className="w-full sm:w-[180px] h-9 bg-secondary border-border text-xs">
+                <SelectValue placeholder="Filter by Channel" />
+              </SelectTrigger>
+              <SelectContent className="bg-popover border-border z-50">
+                <SelectItem value="All" className="text-xs">All Channels</SelectItem>
+                <SelectItem value="QR Code" className="text-xs">QR Code</SelectItem>
+                <SelectItem value="Card Payment" className="text-xs">Card Payment</SelectItem>
+                <SelectItem value="Bank Transfer" className="text-xs">Bank Transfer</SelectItem>
+                <SelectItem value="Cash" className="text-xs">Cash</SelectItem>
+                <SelectItem value="Other" className="text-xs">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="glass-card overflow-hidden">
             <div className="overflow-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-transparent border-border">
-                    <TableHead className="text-muted-foreground text-xs">Date</TableHead>
-                    <TableHead className="text-muted-foreground text-xs w-[160px]">Entity</TableHead>
+                    <TableHead className="text-muted-foreground text-xs cursor-pointer select-none" onClick={() => toggleSort("date")}>
+                      Date <SortIcon field="date" />
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-xs w-[160px] cursor-pointer select-none" onClick={() => toggleSort("entity")}>
+                      Entity <SortIcon field="entity" />
+                    </TableHead>
                     <TableHead className="text-muted-foreground text-xs">Reference</TableHead>
                     <TableHead className="text-muted-foreground text-xs w-[180px]">Remark</TableHead>
                     <TableHead className="text-muted-foreground text-xs text-center">Channel</TableHead>
-                    <TableHead className="text-muted-foreground text-xs text-right">Money In</TableHead>
-                    <TableHead className="text-muted-foreground text-xs text-right">Money Out</TableHead>
-                    <TableHead className="text-muted-foreground text-xs text-right">Balance</TableHead>
+                    <TableHead className="text-muted-foreground text-xs text-right cursor-pointer select-none" onClick={() => toggleSort("money_in")}>
+                      Money In <SortIcon field="money_in" />
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-xs text-right cursor-pointer select-none" onClick={() => toggleSort("money_out")}>
+                      Money Out <SortIcon field="money_out" />
+                    </TableHead>
+                    <TableHead className="text-muted-foreground text-xs text-right cursor-pointer select-none" onClick={() => toggleSort("balance")}>
+                      Balance <SortIcon field="balance" />
+                    </TableHead>
                     <TableHead className="text-muted-foreground text-xs text-center">Type</TableHead>
                     <TableHead className="text-muted-foreground text-xs">Destination</TableHead>
                   </TableRow>

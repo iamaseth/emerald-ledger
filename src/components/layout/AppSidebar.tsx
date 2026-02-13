@@ -18,6 +18,8 @@ import {
   Menu,
   X,
   GitCompareArrows,
+  ClipboardList,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,9 +29,11 @@ const navItems = [
   { title: "Reconciliator", url: "/reconcile", icon: GitCompareArrows },
   { title: "Audit Log", url: "/audit-log", icon: ShieldAlert },
   { title: "Menu & COGS", url: "/menu-cogs", icon: UtensilsCrossed },
+  { title: "Menu Manager", url: "/menu-manager", icon: ClipboardList },
   { title: "Inventory Vault", url: "/inventory", icon: Warehouse },
   { title: "Staff Intelligence", url: "/staff", icon: Users },
   { title: "Accounts Payable", url: "/accounts-payable", icon: FileText },
+  { title: "Suppliers", url: "/suppliers", icon: Building2 },
   { title: "Profit & Loss", url: "/profit-loss", icon: BarChart3 },
   { title: "Data Tools", url: "/data-tools", icon: Database },
   { title: "Data Quality", url: "/data-quality", icon: ShieldCheck },
